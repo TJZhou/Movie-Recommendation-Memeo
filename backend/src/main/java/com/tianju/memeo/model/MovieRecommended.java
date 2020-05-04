@@ -2,37 +2,39 @@ package com.tianju.memeo.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Movie Recommended by user id
  */
 @Entity
+@Table(name = "movie_recommended")
 public class MovieRecommended {
     @Id
-    private String user_id;
-    private String movie_ids;
+    private String userId;
+    private String movieIds;
 
     public MovieRecommended() {
     }
 
-    public MovieRecommended(String user_id, String movie_ids) {
-        this.user_id = user_id;
-        this.movie_ids = movie_ids;
+    public MovieRecommended(String userId, String movieIds) {
+        this.userId = userId;
+        this.movieIds = movieIds;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getMovie_ids() {
-        return movie_ids;
+    public String getMovieIds() {
+        return movieIds;
     }
 
-    public void setMovie_ids(String movie_ids) {
-        this.movie_ids = movie_ids;
+    public void setMovieIds(String movieIds) {
+        this.movieIds = movieIds;
     }
 }

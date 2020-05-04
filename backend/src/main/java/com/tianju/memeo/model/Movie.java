@@ -1,36 +1,34 @@
 package com.tianju.memeo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Table(name = "movie")
 public class Movie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long movie_id;
-    private Long imdb_id;
+    private Long movieId;
+    private Long imdbId;
     private String genres;
     private String title;
     private Double rating;
     private Integer rater;
 
-    public Long getMovie_id() {
-        return movie_id;
+    public Long getMovieId() {
+        return movieId;
     }
 
-    public void setMovie_id(Long movie_id) {
-        this.movie_id = movie_id;
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
     }
 
-    public Long getImdb_id() {
-        return imdb_id;
+    public Long getImdbId() {
+        return imdbId;
     }
 
-    public void setImdb_id(Long imdb_id) {
-        this.imdb_id = imdb_id;
+    public void setImdbId(Long imdbId) {
+        this.imdbId = imdbId;
     }
 
     public String getGenres() {
