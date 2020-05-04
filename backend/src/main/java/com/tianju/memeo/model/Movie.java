@@ -10,25 +10,26 @@ import java.io.Serializable;
 public class Movie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long movie_id;
-    private long imdb_id;
+    private Long movie_id;
+    private Long imdb_id;
     private String genres;
     private String title;
     private Double rating;
+    private Integer rater;
 
-    public long getMovie_id() {
+    public Long getMovie_id() {
         return movie_id;
     }
 
-    public void setMovie_id(long movie_id) {
+    public void setMovie_id(Long movie_id) {
         this.movie_id = movie_id;
     }
 
-    public long getImdb_id() {
+    public Long getImdb_id() {
         return imdb_id;
     }
 
-    public void setImdb_id(long imdb_id) {
+    public void setImdb_id(Long imdb_id) {
         this.imdb_id = imdb_id;
     }
 
@@ -54,5 +55,13 @@ public class Movie implements Serializable {
 
     public void setRating(Double rating) {
         this.rating = rating;
+    }
+
+    public Integer getRater() {
+        return rater;
+    }
+
+    public void setRater(Integer rater) {
+        this.rater = rater;
     }
 }

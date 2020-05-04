@@ -2,6 +2,7 @@ package com.tianju.memeo.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Response implements Serializable {
@@ -14,18 +15,26 @@ public class Response implements Serializable {
         this.code = 2000;
         this.msg = "success";
         this.timestamp = new Timestamp(System.currentTimeMillis()).toString();
+        this.data = new ArrayList<>();
     }
 
     public Response(int code, String msg) {
         this.code = code;
         this.msg = msg;
         this.timestamp = new Timestamp(System.currentTimeMillis()).toString();
+        this.data = new ArrayList<>();
     }
 
-    // successful response - return dataset of movies
-    public Response(Collection<Movie> movies) {
+    // successful response - add dataset of movies
+    public Response(Collection<Object> obj) {
         this();
-        data.addAll(movies);
+        data.addAll(obj);
+    }
+
+    // successful response - add certain object
+    public Response(Object obj) {
+        this();
+        data.add(obj);
     }
 
     // unsuccessful response - return error message

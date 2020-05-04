@@ -59,6 +59,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return source;
   }
 
+
+  @Override
+  public void configure(WebSecurity webSecurity) throws Exception {
+    webSecurity.ignoring().antMatchers("/","/*","/**");
+  }
+
   @Override
   protected void configure(HttpSecurity httpSecurity) throws Exception {
 
