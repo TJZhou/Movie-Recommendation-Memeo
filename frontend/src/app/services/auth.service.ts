@@ -12,9 +12,10 @@ export class AuthService {
   // Create an observable of Auth0 instance of client
   auth0Client$ = (from(
     createAuth0Client({
-      domain: "tj-z.auth0.com",
-      client_id: "MGl38irNLm1J2NaSLvNLPKKJYJXmgDtV",
-      redirect_uri: `${window.location.origin}`
+      domain: 'tj-z.auth0.com',
+      client_id: 'MGl38irNLm1J2NaSLvNLPKKJYJXmgDtV',
+      redirect_uri: `${window.location.origin}`,
+      audience: 'https://tj-z.com/memeo'
     })
   ) as Observable<Auth0Client>).pipe(
     shareReplay(1), // Every subscription receives the same shared value
@@ -51,6 +52,12 @@ export class AuthService {
     return this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.getUser(options))),
       tap(user => this.userProfileSubject$.next(user))
+    );
+  }
+
+  getTokenSilently$(options?): Observable<string> {
+    return this.auth0Client$.pipe(
+      concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
     );
   }
 
@@ -117,7 +124,7 @@ export class AuthService {
     this.auth0Client$.subscribe((client: Auth0Client) => {
       // Call method to log out
       client.logout({
-        client_id: "MGl38irNLm1J2NaSLvNLPKKJYJXmgDtV",
+        client_id: 'MGl38irNLm1J2NaSLvNLPKKJYJXmgDtV',
         returnTo: `${window.location.origin}`
       });
     });

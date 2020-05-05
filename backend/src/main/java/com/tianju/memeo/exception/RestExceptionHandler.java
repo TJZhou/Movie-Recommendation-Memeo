@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.ServletException;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -25,6 +26,13 @@ public class RestExceptionHandler {
     public ResponseEntity<Response> nullPointerException(NullPointerException ex) {
         log.warn("Handle Null pointer exception: " + ex.getMessage());
         Response resp = new Response(4004, "error", ex.getMessage());
+        return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {NoSuchElementException.class})
+    public ResponseEntity<Response> noSuchElementException(NoSuchElementException ex) {
+        log.warn("Handle no such element exception: " + ex.getMessage());
+        Response resp = new Response(4010, "error", ex.getMessage());
         return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
     }
 

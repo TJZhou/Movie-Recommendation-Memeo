@@ -17,12 +17,11 @@ public class MovieController {
         this.movieServiceImpl = movieServiceImpl;
     }
 
-
-    @PostMapping(value = "/{userId}")
-    public ResponseEntity<Response> initRecommendedMovieByUser(@PathVariable String userId) {
-        Response resp = new Response(movieServiceImpl.initUserRecommendation(userId));
-        return ResponseEntity.ok(resp);
-    }
+//    @PostMapping(value = "/{userId}")
+//    public ResponseEntity<Response> initRecommendedMovieByUser(@PathVariable String userId) {
+//        Response resp = new Response(movieServiceImpl.initUserRecommendation(userId));
+//        return ResponseEntity.ok(resp);
+//    }
 
     @GetMapping(value = "/{userId}")
     public ResponseEntity<Response> getRecommendedMovieByUser(@PathVariable String userId) {

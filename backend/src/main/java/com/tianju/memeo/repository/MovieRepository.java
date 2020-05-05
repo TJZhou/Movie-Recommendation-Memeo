@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Collection;
 
 public interface MovieRepository extends CrudRepository<Movie, Long> {
-    @Query(value = "SELECT * FROM movie order by rater limit 10", nativeQuery = true)
+    @Query(value = "SELECT * FROM movie order by rater desc limit 10", nativeQuery = true)
     Collection<Movie> findMostPopularMovies();
 }

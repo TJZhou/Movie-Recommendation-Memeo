@@ -9,7 +9,7 @@ import { MainPageComponent } from './components/main-page/main-page.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RequestInterceptorService } from './services/request-interceptor.service';
+import { InterceptorService } from './services/request-interceptor.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
 
@@ -24,11 +24,11 @@ import { LoginComponent } from './components/login/login.component';
     MatSidenavModule,
     MatToolbarModule],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: RequestInterceptorService,
-      multi: true,
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: InterceptorService,
+    //   multi: true,
+    // },
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,

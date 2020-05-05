@@ -1,5 +1,8 @@
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
+import { Movie } from './../../models/movie.model';
+import { Response } from './../../models/response.model';
+import { MovieService } from './../../services/movie.service';
 
 @Component({
   selector: 'app-main-page',
@@ -9,7 +12,10 @@ import { Component, OnInit } from '@angular/core';
 export class MainPageComponent implements OnInit {
 
   username: string;
-  constructor(public auth: AuthService) {
+  isLoading = true;
+  movies: Movie[];
+
+  constructor(public auth: AuthService, public movieService: MovieService) {
     auth.userProfile$.subscribe(res => {
       if (res !== null && res !== undefined) {
         this.username = res.name;
@@ -18,6 +24,14 @@ export class MainPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.username);
+    this.movieService.getMovieRecommendation(this.username).subscribe(res => {
+      const response: Response = res;
+      this.movies = response.data as Movie[];
+      this.isLoading = false;
+    });
+  }
+
+  test() {
+    console.log(this.movies);
   }
 }

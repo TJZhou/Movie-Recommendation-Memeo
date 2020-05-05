@@ -1,6 +1,6 @@
 package com.tianju.memeo;
 
-import com.tianju.memeo.model.MovieRecommended;
+import com.tianju.memeo.model.Movie;
 import com.tianju.memeo.service.MovieServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testng.Assert;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RunWith(SpringRunner.class)
@@ -19,22 +20,19 @@ public class MovieServiceTest {
     private MovieServiceImpl movieServiceImpl;
 
     @Test
-    public void UserRecommendationTest() {
-        // no element in database before init user recommendation
-        Assert.assertThrows(NoSuchElementException.class, () -> {
-            movieServiceImpl.getUserRecommendation("test-user-fhd219ds2hf21ds91u0932je2io12d901");
-        });
-
-        // found user recommendation after init
-        MovieRecommended movieRecommended = movieServiceImpl.initUserRecommendation("test-user-fhd219ds2hf21ds91u0932je2io12d901");
-        Assert.assertEquals(movieRecommended.getMovieIds(), "128,117,49,106,193609,137,83,55,129,77,");
-        String movieIds = movieServiceImpl.getUserRecommendation("test-user-fhd219ds2hf21ds91u0932je2io12d901");
-        Assert.assertEquals(movieIds, "128,117,49,106,193609,137,83,55,129,77,");
-
-        // no element in database after delete user recommendation
+    public void userRecommendationTestWithoutExistingUser() {
+        // found user recommendation (user first login)
+        List<Movie> movies = movieServiceImpl.getUserRecommendation("test-user-fhd219ds2hf21ds91u0932je2io12d901");
+        Assert.assertTrue(movies.get(0).getMovieId() == 356);
+        Assert.assertTrue(movies.get(1).getMovieId() == 318);
+        // delete test user recommendation
         movieServiceImpl.deleteUserRecommendation("test-user-fhd219ds2hf21ds91u0932je2io12d901");
-        Assert.assertThrows(NoSuchElementException.class, () -> {
-            movieServiceImpl.getUserRecommendation("test-user-fhd219ds2hf21ds91u0932je2io12d901");
-        });
+    }
+
+    @Test
+    public void userRecommendationTestWithExistingUser() {
+        List<Movie> movies = movieServiceImpl.getUserRecommendation("test-user");
+        Assert.assertTrue(movies.get(0).getMovieId() == 199);
+        Assert.assertTrue(movies.get(1).getMovieId() == 100);
     }
 }
