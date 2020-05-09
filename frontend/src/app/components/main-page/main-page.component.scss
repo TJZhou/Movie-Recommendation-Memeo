@@ -15,7 +15,8 @@
 }
 .sidenav-container {
   background: #eee;
-  width: 300px;
+  width: 25%;
+  min-width: 300px;
 }
 
 .loading {
@@ -29,4 +30,8 @@
 .spinner {
   top:40%;
   left:47%;
+}
+
+.movie {
+
 }

@@ -1,3 +1,4 @@
+import { ErrorPageComponent } from './error-page/error-page.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -10,7 +11,7 @@ const routes: Routes = [
   { path: '', component: MainPageComponent, canActivate: [AuthGuard]},
   { path: 'main', component: MainPageComponent, canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent},
-  { path: '**', component: MainPageComponent, canActivate: [AuthGuard]}
+  { path: '**', component: ErrorPageComponent}
 ];
 
 @NgModule({

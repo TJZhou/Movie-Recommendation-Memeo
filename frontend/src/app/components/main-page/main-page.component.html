@@ -1,14 +1,30 @@
-<div class = "loading" *ngIf="isLoading">
-  <mat-spinner class = "spinner"></mat-spinner>
+<div class="loading" *ngIf="isLoading">
+  <mat-spinner class="spinner"></mat-spinner>
 </div>
 
 <mat-toolbar color="primary">
-  <span class = "cursor-pointer" (click) = "test()">Memeo</span>
+  <span class="cursor-pointer" (click)="test()">Memeo</span>
   <span class="fill-remaining-space"></span>
-  <span class = "cursor-pointer" (click) = "auth.logout()">Log Out</span>
+  <span class="cursor-pointer" (click)="auth.logout()">Log Out</span>
 </mat-toolbar>
 
-<mat-sidenav-container class = "sidenav">
-  <mat-sidenav mode="side" opened class = "sidenav-container">Sidenav content</mat-sidenav>
-  <mat-sidenav-content>Main content</mat-sidenav-content>
-</mat-sidenav-container>
+    <p>Movies Recommended For You</p>
+    <mat-grid-list cols="3" rowHeight="1:2">
+      <mat-grid-tile
+          *ngFor="let movieRecommendation of movieRecommendations">
+          <mat-card class = "example-card">
+            <mat-card-header>
+              <mat-card-title>{{movieRecommendation.title}}</mat-card-title>
+              <mat-card-subtitle>{{movieRecommendation.genres}}</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image src="assets/images/Forrest-Gump.jpg" alt="{{movieRecommendation.title}}">
+            <mat-card-content>
+              <p>Rating:{{movieRecommendation.rating}}</p>
+              <span>imdb link: </span>
+              <a href = "https://www.imdb.com/title/tt0{{movieRecommendation.imdbId}}">
+                https://www.imdb.com/title/tt0{{movieRecommendation.imdbId}}
+              </a>
+            </mat-card-content>
+          </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>

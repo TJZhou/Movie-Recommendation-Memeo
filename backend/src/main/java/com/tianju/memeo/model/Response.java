@@ -26,27 +26,27 @@ public class Response implements Serializable {
     }
 
     // successful response - add a certain object
-    public Response(Object obj) {
+    public Response(Movie movie) {
         this();
-        data.add(obj);
+        data.add(movie);
     }
 
     // successful response - add objects
-    public Response(Collection<Object> obj) {
+    public Response(Collection<Movie> movies) {
         this();
-        data.addAll(obj);
+        data.addAll(movies);
     }
 
     // add a certain object with code and message
-    public Response(Integer code,  String msg, Object obj) {
+    public Response(Integer code,  String msg, Error error) {
         this(code, msg);
-        data.add(obj);
+        data.add(error);
     }
 
     // add objects with code and message
-    public Response(Integer code,  String msg, Collection<Object> obj) {
+    public Response(Integer code,  String msg, Collection<Error> errors) {
         this(code, msg);
-        data.addAll(obj);
+        data.addAll(errors);
     }
 
     public Integer getCode() {

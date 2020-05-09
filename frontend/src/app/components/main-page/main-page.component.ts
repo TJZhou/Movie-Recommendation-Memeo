@@ -9,11 +9,20 @@ import { MovieService } from './../../services/movie.service';
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss']
 })
+
+
 export class MainPageComponent implements OnInit {
 
   username: string;
   isLoading = true;
-  movies: Movie[];
+  movieRecommendations: Movie[];
+
+  tiles: Tile[] = [
+    {text: 'One', cols: 3, rows: 1, color: 'lightblue'},
+    {text: 'Two', cols: 1, rows: 2, color: 'lightgreen'},
+    {text: 'Three', cols: 1, rows: 1, color: 'lightpink'},
+    {text: 'Four', cols: 2, rows: 1, color: '#DDBDF1'},
+  ];
 
   constructor(public auth: AuthService, public movieService: MovieService, public router: Router) {
     auth.userProfile$.subscribe(res => {
@@ -26,17 +35,13 @@ export class MainPageComponent implements OnInit {
   ngOnInit() {
     this.movieService.getMovieRecommendation(this.username).subscribe(res => {
       const response: MovieResponse = res;
-      this.movies = response.data;
+      console.log(res);
+      this.movieRecommendations = response.data;
       this.isLoading = false;
     });
   }
 
-  logOut() {
-    this.auth.logout();
-    // this.router.navigate(['login']);
-  }
-
   test() {
-    console.log(this.movies);
+    console.log(this.movieRecommendations);
   }
 }
