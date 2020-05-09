@@ -1,4 +1,14 @@
-.cursor-pointer {
+.container {
+  margin: 10px;
+}
+
+.button {
+  min-width: 100px;
+}
+
+.header-span{
+  padding: 0 1em 0 1em;
+  font-size: 1em;
   cursor: pointer;
 }
 
@@ -6,18 +16,18 @@
   flex: 1 1 auto;
 }
 
-.sidenav {
-    position: absolute;
-    top: 64px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-.sidenav-container {
-  background: #eee;
-  width: 25%;
-  min-width: 300px;
-}
+// .sidenav {
+//     position: absolute;
+//     top: 64px;
+//     bottom: 0;
+//     left: 0;
+//     right: 0;
+// }
+// .sidenav-container {
+//   background: #eee;
+//   width: 25%;
+//   min-width: 300px;
+// }
 
 .loading {
   z-index: 999;
@@ -32,6 +42,14 @@
   left:47%;
 }
 
-.movie {
-
+.genres-tag {
+  margin:10px;
+  display: inline-block;
 }
+
+.movieCard {
+  width: 350px;
+  margin: 20px;
+  display: inline-block;
+}
+

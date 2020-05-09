@@ -11,21 +11,29 @@ import org.springframework.web.bind.annotation.*;
 public class MovieController {
 
     private MovieServiceImpl movieServiceImpl;
+    // this can be changed according to frontend requirements
+    private final Long pageSize = 30l;
 
     @Autowired
     public MovieController(MovieServiceImpl movieServiceImpl) {
         this.movieServiceImpl = movieServiceImpl;
     }
 
-//    @PostMapping(value = "/{userId}")
-//    public ResponseEntity<Response> initRecommendedMovieByUser(@PathVariable String userId) {
-//        Response resp = new Response(movieServiceImpl.initUserRecommendation(userId));
-//        return ResponseEntity.ok(resp);
-//    }
-
     @GetMapping(value = "/{userId}")
     public ResponseEntity<Response> getRecommendedMovieByUser(@PathVariable String userId) {
         Response resp = new Response(movieServiceImpl.getUserRecommendation(userId));
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping(value = "/genre")
+    public ResponseEntity<Response> getMoviesByGenre(@RequestParam String genre, @RequestParam Long page) {
+        Response resp = new Response(movieServiceImpl.getMoviesByGenre(genre, pageSize, page));
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping(value = "/count/genre")
+    public ResponseEntity<Response> countMoviesByGenre(@RequestParam String genre) {
+        Response resp = new Response(movieServiceImpl.countMoviesByGenre(genre));
         return ResponseEntity.ok(resp);
     }
 }

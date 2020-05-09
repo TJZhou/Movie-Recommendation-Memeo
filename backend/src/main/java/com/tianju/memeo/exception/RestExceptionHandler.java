@@ -39,14 +39,14 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(value = {ServletException.class})
     public ResponseEntity<Response> servletException(ServletException ex) {
-        log.warn("Handling Servlet Exception: " + ex.getMessage());
+        ex.printStackTrace();
         Response resp = new Response(5000, "error", new Error("Servlet Exception", ex.getMessage()));
         return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Response> exception(Exception ex) {
-        log.warn("Handling Internal Server Exception: " + ex.getMessage());
+        ex.printStackTrace();
         Response resp = new Response(5001, "error", new Error("Internal Server Exception", ex.getMessage()));
         return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
     }

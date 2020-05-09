@@ -51,12 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return source;
   }
 
-
-  /**
-   * Used for test only. Permit all requests without authorization.
-   * @param httpSecurity
-   * @throws Exception
-   */
+//  /**
+//   * Used for test only. Permit all requests without authorization.
+//   * @param webSecurity
+//   * @throws Exception
+//   */
 //  @Override
 //  public void configure(WebSecurity webSecurity) throws Exception {
 //    webSecurity.ignoring().antMatchers("/","/*","/**");
@@ -68,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .cors()
             .and()
             .authorizeRequests()
-            .mvcMatchers("/","/*","/**").authenticated()
+            .mvcMatchers("/","/*","/**").permitAll()
             .and()
             .oauth2ResourceServer().jwt();
   }

@@ -25,6 +25,11 @@ public class Response implements Serializable {
         this.data = new ArrayList<>();
     }
 
+    public Response(Long numberOfMovies) {
+        this();
+        data.add(numberOfMovies);
+    }
+
     // successful response - add a certain object
     public Response(Movie movie) {
         this();

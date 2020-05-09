@@ -63,7 +63,13 @@ public class MovieServiceImpl {
         movieRecommendedRepository.deleteById(userId);
     }
 
+    public Collection<Movie> getMoviesByGenre(String genre, Long pageSize, Long page) {
+        return movieRepository.findMostPopularMoviesByGenre('%'+genre+'%', pageSize, page * pageSize);
+    }
 
+    public Long countMoviesByGenre(String genre) {
+        return movieRepository.countMoviesByGenre('%'+genre+'%');
+    }
 
     private MovieRecommended updateUserRecommendation(String userId) {
         return null;

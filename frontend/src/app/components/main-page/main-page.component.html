@@ -2,29 +2,44 @@
   <mat-spinner class="spinner"></mat-spinner>
 </div>
 
+
 <mat-toolbar color="primary">
-  <span class="cursor-pointer" (click)="test()">Memeo</span>
+  <span class="header-span">Memeo</span>
   <span class="fill-remaining-space"></span>
-  <span class="cursor-pointer" (click)="auth.logout()">Log Out</span>
+  <span class="header-span" (click)="auth.logout()">Log out</span>
 </mat-toolbar>
 
-    <p>Movies Recommended For You</p>
-    <mat-grid-list cols="3" rowHeight="1:2">
-      <mat-grid-tile
-          *ngFor="let movieRecommendation of movieRecommendations">
-          <mat-card class = "example-card">
-            <mat-card-header>
-              <mat-card-title>{{movieRecommendation.title}}</mat-card-title>
-              <mat-card-subtitle>{{movieRecommendation.genres}}</mat-card-subtitle>
-            </mat-card-header>
-            <img mat-card-image src="assets/images/Forrest-Gump.jpg" alt="{{movieRecommendation.title}}">
-            <mat-card-content>
-              <p>Rating:{{movieRecommendation.rating}}</p>
-              <span>imdb link: </span>
-              <a href = "https://www.imdb.com/title/tt0{{movieRecommendation.imdbId}}">
-                https://www.imdb.com/title/tt0{{movieRecommendation.imdbId}}
-              </a>
-            </mat-card-content>
-          </mat-card>
-      </mat-grid-tile>
-    </mat-grid-list>
+<div class="container">
+    <div class = "genres-tag">
+      <button mat-raised-button (click)="getMovieRecommendation()">Recommended</button>
+    </div>
+    <div class = "genres-tag">
+      <button mat-raised-button (click)="listMoviesByGenre('')">All Movies</button>
+    </div>
+    <ng-container *ngFor = "let genres of genres">
+      <div class = "genres-tag">
+        <button mat-raised-button (click)="listMoviesByGenre(genres)">{{genres}}</button>
+      </div>
+    </ng-container>
+</div>
+
+<div class="container">
+  <div fxLayout="row wrap">
+    <ng-container  *ngFor = "let movie of movies">
+      <mat-card class = "movieCard">
+        <mat-card-header>
+          <mat-card-title>{{movie.title}}</mat-card-title>
+          <mat-card-subtitle>{{movie.genres}}</mat-card-subtitle>
+        </mat-card-header>
+        <!-- <img mat-card-image src="assets/images/Forrest-Gump.jpg" alt="{{movieRecommendation.title}}"> -->
+        <mat-card-content>
+          <p>Rating:{{movie.rating}}</p>
+          <span>imdb link: </span>
+          <a href = "https://www.imdb.com/title/tt0{{movie.imdbId}}" (click) = "clickMovieLink(this)" target="_blank">
+            https://www.imdb.com/title/tt0{{movie.imdbId}}
+          </a>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+ </div>
+</div>

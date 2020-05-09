@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class Error implements Serializable {
     String errorType;
-    String errorMessages;
+    String errorMessage;
 
-    public Error(String errorType, String errorMessages) {
+    public Error(String errorType, String errorMessage) {
         this.errorType = errorType;
-        this.errorMessages = errorMessages;
+        this.errorMessage = errorMessage;
     }
 
     public String getErrorType() {
@@ -19,11 +19,11 @@ public class Error implements Serializable {
         this.errorType = errorType;
     }
 
-    public String getErrorMessages() {
-        return errorMessages;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
-    public void setErrorMessages(String errorMessages) {
-        this.errorMessages = errorMessages;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }
