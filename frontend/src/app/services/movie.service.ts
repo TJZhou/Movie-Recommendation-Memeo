@@ -1,3 +1,4 @@
+import { NumberResponse } from './../models/response.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -23,5 +24,12 @@ export class MovieService {
       'page': page.toString()
     };
     return this.http.get<MovieResponse>(this.movieUrl + 'genre', {params});
+  }
+
+  public countMoviesByGenre(genre: string): Observable<NumberResponse> {
+    const params = {
+      'genre': genre,
+    };
+    return this.http.get<NumberResponse>(this.movieUrl + 'count/genre', {params});
   }
 }

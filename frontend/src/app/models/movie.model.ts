@@ -1,7 +1,5 @@
-export class MovieResponse {
-  code: number;
-  msg: string;
-  timestamp: string;
+
+export class MovieResponse extends Response {
   data: Array<Movie>;
 }
 

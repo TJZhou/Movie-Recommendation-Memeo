@@ -10,23 +10,23 @@
 </mat-toolbar>
 
 <div class="container">
-    <div class = "genres-tag">
-      <button mat-raised-button (click)="getMovieRecommendation()">Recommended</button>
+  <div class="genres-tag">
+    <button mat-raised-button (click)="getMovieRecommendation()">Recommended</button>
+  </div>
+  <div class="genres-tag">
+    <button mat-raised-button (click)="listMoviesByGenre('')">All Movies</button>
+  </div>
+  <ng-container *ngFor="let genres of genres">
+    <div class="genres-tag">
+      <button mat-raised-button (click)="listMoviesByGenre(genres)">{{genres}}</button>
     </div>
-    <div class = "genres-tag">
-      <button mat-raised-button (click)="listMoviesByGenre('')">All Movies</button>
-    </div>
-    <ng-container *ngFor = "let genres of genres">
-      <div class = "genres-tag">
-        <button mat-raised-button (click)="listMoviesByGenre(genres)">{{genres}}</button>
-      </div>
-    </ng-container>
+  </ng-container>
 </div>
 
 <div class="container">
-  <div fxLayout="row wrap">
-    <ng-container  *ngFor = "let movie of movies">
-      <mat-card class = "movieCard">
+  <div fxLayout="row wrap"  fxLayoutAlign="center center">
+    <ng-container *ngFor="let movie of movies">
+      <mat-card class="movieCard">
         <mat-card-header>
           <mat-card-title>{{movie.title}}</mat-card-title>
           <mat-card-subtitle>{{movie.genres}}</mat-card-subtitle>
@@ -35,11 +35,25 @@
         <mat-card-content>
           <p>Rating:{{movie.rating}}</p>
           <span>imdb link: </span>
-          <a href = "https://www.imdb.com/title/tt0{{movie.imdbId}}" (click) = "clickMovieLink(this)" target="_blank">
+          <a href="https://www.imdb.com/title/tt0{{movie.imdbId}}" (click)="clickMovieLink(this)" target="_blank">
             https://www.imdb.com/title/tt0{{movie.imdbId}}
           </a>
         </mat-card-content>
       </mat-card>
     </ng-container>
- </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <button class="footer" mat-raised-button (click)="goToPage(page-1)">Previous</button>
+  {{page}}
+  <button class="footer" mat-raised-button (click)="goToPage(page+1)">Next</button>
+  <mat-form-field class="footer page-field">
+    <mat-label>Page</mat-label>
+    <mat-select [(value)]="page">
+      <mat-option *ngFor="let pageNum of pageArr" [(value)]="pageNum">{{pageNum}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button class="footer" mat-raised-button (click)="goToPage(page)">Go</button>
 </div>

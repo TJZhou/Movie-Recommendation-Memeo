@@ -1,4 +1,4 @@
-import { ErrorPageComponent } from './error-page/error-page.component';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';

@@ -1,7 +1,4 @@
-export class ErrorResponse {
-  code: number;
-  msg: string;
-  timestamp: string;
+export class ErrorResponse extends Response {
   data: Array<Error>;
 }
 
