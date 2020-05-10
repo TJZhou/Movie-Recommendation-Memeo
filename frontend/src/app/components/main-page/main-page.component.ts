@@ -1,4 +1,3 @@
-import { MessageComponent } from './../message/message.component';
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';

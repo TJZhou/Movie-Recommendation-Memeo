@@ -10,18 +10,26 @@
 </mat-toolbar>
 
 <div class="container">
-  <div class="genres-tag">
-    <button mat-raised-button (click)="getMovieRecommendation()">Recommended</button>
-  </div>
-  <div class="genres-tag">
-    <button mat-raised-button (click)="listMoviesByGenre('')">All Movies</button>
-  </div>
-  <ng-container *ngFor="let genres of genres">
-    <div class="genres-tag">
-      <button mat-raised-button (click)="listMoviesByGenre(genres)">{{genres}}</button>
-    </div>
-  </ng-container>
+  <mat-button-toggle-group  #group="matButtonToggleGroup">
+    <mat-button-toggle  mat-raised-button (click)="getMovieRecommendation()">Recommended</mat-button-toggle>
+    <mat-button-toggle  mat-raised-button (click)="listMoviesByGenre('')">All Movies</mat-button-toggle>
+    <ng-container *ngFor="let genres of genres">
+      <mat-button-toggle mat-raised-button (click)="listMoviesByGenre(genres)">{{genres}}</mat-button-toggle>
+    </ng-container>
+  </mat-button-toggle-group>
 </div>
+<!--
+<div class="genres-tag">
+  <button mat-raised-button (click)="getMovieRecommendation()">Recommended</button>
+</div>
+<div class="genres-tag">
+  <button mat-raised-button (click)="listMoviesByGenre('')">All Movies</button>
+</div>
+<ng-container *ngFor="let genres of genres">
+  <div class="genres-tag">
+    <button mat-raised-button (click)="listMoviesByGenre(genres)">{{genres}}</button>
+  </div>
+</ng-container> -->
 
 <div class="container">
   <div fxLayout="row wrap"  fxLayoutAlign="center center">
