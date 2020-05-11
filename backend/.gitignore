@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### properties files contain vulnerable info ###
-application-test.properties
+application-dev.properties
 application-prod.properties

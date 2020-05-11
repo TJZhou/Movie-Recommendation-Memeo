@@ -7,9 +7,15 @@ import com.tianju.memeo.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 @Service(value = "MovieServiceImpl")
 public class MovieServiceImpl {
@@ -71,7 +77,22 @@ public class MovieServiceImpl {
         return movieRepository.countMoviesByGenre('%'+genre+'%');
     }
 
-    private MovieRecommended updateUserRecommendation(String userId) {
-        return null;
+    /**
+     * Update movie recommendation.
+     * Note: this is not an "asynchronized" process. The movie clicked by current user will
+     *      be added to the flume user log. And Kafka & Spark will consume the log data. After
+     *      Spark finishes the ASL algorithm the recommended movie will be updated to the database.
+     * @param userId
+     * @param movie
+     * @return: Nothing in current process.
+     */
+    public void updateUserRecommendation(String userId, Movie movie) {
+        try(FileWriter fw = new FileWriter("memeo-user.log", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw)) {
+            out.println(userId + "--" + movie.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

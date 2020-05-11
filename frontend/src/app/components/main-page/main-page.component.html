@@ -43,7 +43,7 @@
         <mat-card-content>
           <p>Rating:{{movie.rating}}</p>
           <span>imdb link: </span>
-          <a href="https://www.imdb.com/title/tt0{{movie.imdbId}}" (click)="clickMovieLink(this)" target="_blank">
+          <a href="https://www.imdb.com/title/tt0{{movie.imdbId}}" (click)="clickMovieLink(movie)" target="_blank">
             https://www.imdb.com/title/tt0{{movie.imdbId}}
           </a>
         </mat-card-content>

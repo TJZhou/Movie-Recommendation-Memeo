@@ -1,5 +1,6 @@
 package com.tianju.memeo.controller;
 
+import com.tianju.memeo.model.Movie;
 import com.tianju.memeo.model.Response;
 import com.tianju.memeo.service.MovieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,18 @@ public class MovieController {
         return ResponseEntity.ok(resp);
     }
 
+    /**
+     * This function is used to update movie recommendation by user.
+     * @param userId
+     * @param movie: the movie user clicked
+     * @return
+     */
+    @PutMapping(value = "/{userId}")
+    public ResponseEntity<Response> updateRecommendation(@PathVariable String userId, @RequestBody Movie movie) {
+        movieServiceImpl.updateUserRecommendation(userId, movie);
+        return null;
+    }
+
     @GetMapping(value = "/genre")
     public ResponseEntity<Response> getMoviesByGenre(@RequestParam String genre, @RequestParam Long page) {
         Response resp = new Response(movieServiceImpl.getMoviesByGenre(genre, pageSize, page));
@@ -36,4 +49,5 @@ public class MovieController {
         Response resp = new Response(movieServiceImpl.countMoviesByGenre(genre));
         return ResponseEntity.ok(resp);
     }
+
 }

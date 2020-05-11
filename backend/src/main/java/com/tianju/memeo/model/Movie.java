@@ -62,4 +62,8 @@ public class Movie implements Serializable {
     public void setRater(Integer rater) {
         this.rater = rater;
     }
+
+    public String toString() {
+        return movieId + "--" + imdbId + "--" + genres + "--" + title + "--" + rating + "--" + rater;
+    }
 }

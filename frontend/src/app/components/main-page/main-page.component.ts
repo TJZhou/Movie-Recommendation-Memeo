@@ -48,7 +48,7 @@ export class MainPageComponent implements OnInit {
       }
   }
 
-  getMovieRecommendation() {
+  getMovieRecommendation(): void {
     this.router.navigate([], {queryParams: {'genre': 'Recommended'}});
     this.page = 1;
     this.pageArr = [1];
@@ -62,7 +62,7 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  getNumberOfMovies(genre: string) {
+  getNumberOfMovies(genre: string): void {
     this.movieService.countMoviesByGenre(genre).subscribe(res => {
       const response: NumberResponse = res;
       this.maxPage = Math.floor((response.data[0] - 1) / this.sizePerPage) + 1;
@@ -75,7 +75,7 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  listMoviesByGenre(genre: string) {
+  listMoviesByGenre(genre: string): void {
     // change movie category or first login (oreGenreSelected is undefined)
     if (this.prevGenreSelected !== genre) {
       this.page = 1;
@@ -93,7 +93,7 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  goToPage(newPage) {
+  goToPage(newPage): void {
     if (this.queryParamGenre === 'Recommended' || this.queryParamGenre === undefined) {
       this.errorMessage.open('No more recommended movies', 'error', {
         duration: 1800,
@@ -115,7 +115,7 @@ export class MainPageComponent implements OnInit {
     }
   }
 
-  clickMovieLink(ele) {
-    // to-do send user log to flume
+  clickMovieLink(movie: Movie): void {
+    this.movieService.updateRecommendation(this.username, movie).subscribe();
   }
 }
