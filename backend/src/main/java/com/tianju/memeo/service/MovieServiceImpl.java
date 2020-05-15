@@ -13,9 +13,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
 
 @Service(value = "MovieServiceImpl")
 public class MovieServiceImpl {
@@ -30,9 +29,9 @@ public class MovieServiceImpl {
     }
 
     public List<Movie> getUserRecommendation(String userId) {
-        int userExists = movieRecommendedRepository.whetherUserExists(userId);
+        boolean userExists = movieRecommendedRepository.existsByUserId(userId);
         String movieRecommended;
-        if(userExists == 1)
+        if(userExists)
             movieRecommended = movieRecommendedRepository.findById(userId).get().getMovieIds();
         else
             movieRecommended = initUserRecommendation(userId);
@@ -87,10 +86,10 @@ public class MovieServiceImpl {
      * @return: Nothing in current process.
      */
     public void updateUserRecommendation(String userId, Movie movie) {
-        try(FileWriter fw = new FileWriter("memeo-user.log", true);
+        try(FileWriter fw = new FileWriter("log-user/memeo-user.log", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw)) {
-            out.println(userId + "--" + movie.toString());
+            out.println(new Date() + "--" +userId + "--" + movie.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
