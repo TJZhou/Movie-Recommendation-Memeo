@@ -51,3 +51,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Resource file that contains sensitive info
+Resource.scala
