@@ -2,12 +2,13 @@ package com.tianju.memeo.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
 @Table(name = "movie")
 public class Movie implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
     private Long imdbId;
     private String genres;

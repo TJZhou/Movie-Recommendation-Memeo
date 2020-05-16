@@ -18,9 +18,10 @@ export class MovieService {
     return this.http.get<MovieResponse>(this.movieUrl + userId);
   }
 
-  public getMoviesByGenre(genre: string, page: number): Observable<MovieResponse> {
+  public getMoviesByGenre(genre: string, userId: string, page: number): Observable<MovieResponse> {
     const params = {
       'genre': genre,
+      'userId': userId,
       'page': page.toString()
     };
     return this.http.get<MovieResponse>(this.movieUrl + 'genre', {params});

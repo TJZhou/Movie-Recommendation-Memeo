@@ -10,4 +10,7 @@ export class Movie {
   title: string;
   rating: string;
   rater: number;
+  userId: string;
+  userRating: string;
+  timestamp: string;
 }

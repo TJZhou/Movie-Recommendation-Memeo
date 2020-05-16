@@ -39,8 +39,8 @@ public class MovieController {
     }
 
     @GetMapping(value = "/genre")
-    public ResponseEntity<Response> getMoviesByGenre(@RequestParam String genre, @RequestParam Long page) {
-        Response resp = new Response(movieServiceImpl.getMoviesByGenre(genre, pageSize, page));
+    public ResponseEntity<Response> getMoviesByGenre(@RequestParam String genre, @RequestParam String userId, @RequestParam Long page) {
+        Response resp = new Response(movieServiceImpl.getMoviesByGenre(genre, userId, pageSize, page));
         return ResponseEntity.ok(resp);
     }
 

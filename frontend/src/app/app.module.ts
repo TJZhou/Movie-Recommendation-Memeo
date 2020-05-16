@@ -18,10 +18,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
-import { MessageComponent } from './components/message/message.component';
 
 @NgModule({
-  declarations: [AppComponent, MainPageComponent, LoginComponent, ErrorPageComponent, MessageComponent],
+  declarations: [AppComponent, MainPageComponent, LoginComponent, ErrorPageComponent],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -44,6 +43,5 @@ import { MessageComponent } from './components/message/message.component';
     },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [MessageComponent]
 })
 export class AppModule {}

@@ -66,7 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .cors().and()
             .authorizeRequests()
             .mvcMatchers("/","/*","/**")
-            .authenticated().and()
+            .authenticated()
+            .and()
             .oauth2ResourceServer()
             .jwt();
   }

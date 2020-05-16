@@ -84,7 +84,8 @@ export class MainPageComponent implements OnInit {
     this.prevGenreSelected = genre;
     this.router.navigate([], {queryParams: {'genre': genre}});
     this.isLoading = true;
-    this.movieService.getMoviesByGenre(genre, this.page - 1).subscribe(res => {
+    this.movieService.getMoviesByGenre(genre, this.username, this.page - 1).subscribe(res => {
+      console.log(res);
       const response: MovieResponse = res;
       this.movies = response.data;
       this.isLoading = false;
