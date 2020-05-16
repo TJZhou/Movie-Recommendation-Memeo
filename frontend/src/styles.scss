@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Import star-rating styles */
+@import "~css-star-rating/css/star-rating.min.css";
+
 * {
   font-family: Raleway /* Replace with your custom font */, sans-serif !important;
 }
@@ -7,3 +10,4 @@
 html, body { height: 100%; }
 
 body { margin: 0;}
+

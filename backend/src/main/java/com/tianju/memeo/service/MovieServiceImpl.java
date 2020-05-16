@@ -2,7 +2,10 @@ package com.tianju.memeo.service;
 
 import com.tianju.memeo.interfaces.MoviePOJO;
 import com.tianju.memeo.model.Movie;
+import com.tianju.memeo.model.MovieRating;
+import com.tianju.memeo.model.MovieRatingId;
 import com.tianju.memeo.model.MovieRecommend;
+import com.tianju.memeo.repository.MovieRatingRepository;
 import com.tianju.memeo.repository.MovieRecommendRepository;
 import com.tianju.memeo.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +16,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Map;
+import java.util.Optional;
 
 @Service(value = "MovieServiceImpl")
 public class MovieServiceImpl {
 
     private MovieRepository movieRepository;
+    private final MovieRatingRepository movieRatingRepository;
     private MovieRecommendRepository movieRecommendedRepository;
 
     @Autowired
-    public MovieServiceImpl(MovieRepository movieRepository, MovieRecommendRepository movieRecommendedRepository) {
+    public MovieServiceImpl(MovieRepository movieRepository, MovieRecommendRepository movieRecommendedRepository, MovieRatingRepository movieRatingRepository) {
         this.movieRepository = movieRepository;
         this.movieRecommendedRepository = movieRecommendedRepository;
+        this.movieRatingRepository = movieRatingRepository;
     }
 
     public Collection<MoviePOJO> getUserRecommendation(String userId) {
@@ -59,7 +66,8 @@ public class MovieServiceImpl {
     }
 
     /**
-     * Update movie recommendation.
+     * Update movie rating first.
+     * Then update the movie recommendation according to current user and current movie rating.
      * Note: this is not an "asynchronized" process. The movie clicked by current user will
      * be added to the flume user log. And Kafka & Spark will consume the log data. After
      * Spark finishes the ASL algorithm the recommended movie will be updated to the database.
@@ -68,13 +76,26 @@ public class MovieServiceImpl {
      * @param movie
      * @return: Nothing in current process.
      */
-    public void updateUserRecommendation(String userId, Movie movie) {
+    public void updateMovieRating(String userId, Map<String, String> movie) {
+        Long movieId = Long.parseLong(movie.get("movieId"));
+        Integer userRating = Integer.parseInt(movie.get("userRating"));
+        String genres = movie.get("genres");
+        String title = movie.get("title");
+        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
+        MovieRating movieRating = getMovieRating(userId, movieId)
+                .orElse(new MovieRating(userId, movieId, userRating, timestamp));
+        movieRating.setRating(userRating);
+        movieRatingRepository.save(movieRating);
         try (FileWriter fw = new FileWriter("log-user/memeo-user.log", true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
-            out.println(new Date(System.currentTimeMillis()) + "--" + userId + "--" + movie.toString());
+            out.println(timestamp+ "--" + userId + "--" + movieId+ "--" + title + "--" + genres + "--" + userRating);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Optional<MovieRating> getMovieRating(String userId, Long movieId) {
+        return movieRatingRepository.findById(new MovieRatingId(userId, movieId));
     }
 }

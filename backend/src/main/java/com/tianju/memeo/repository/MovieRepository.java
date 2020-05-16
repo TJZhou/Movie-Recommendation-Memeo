@@ -11,9 +11,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(value = "select * from movie order by rater desc limit 10", nativeQuery = true)
     Collection<Movie> findMostPopularMovies();
 
-//    @Query(value = "select * from movie where genres like ?1 order by rater desc limit ?2 offset ?3", nativeQuery = true)
-//    Collection<Movie> findMostPopularMoviesByGenre(String genres, Long pageSize, Long page);
-
     @Query(value =
             "select m.movie_id as movieId, m.imdb_id as imdbId, m.genres, m.rating, m.rater, m.title, " +
             "mr.user_id as userId, mr.rating as userRating, mr.timestamp from " +

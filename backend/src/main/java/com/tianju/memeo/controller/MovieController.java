@@ -1,11 +1,14 @@
 package com.tianju.memeo.controller;
 
-import com.tianju.memeo.model.Movie;
+import com.tianju.memeo.interfaces.MoviePOJO;
 import com.tianju.memeo.model.Response;
 import com.tianju.memeo.service.MovieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/movie")
@@ -21,32 +24,38 @@ public class MovieController {
     }
 
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<Response> getRecommendedMovieByUser(@PathVariable String userId) {
-        Response resp = new Response(movieServiceImpl.getUserRecommendation(userId));
+    public ResponseEntity<Response<MoviePOJO>> getRecommendedMovieByUser(@PathVariable String userId) {
+        Response<MoviePOJO> resp = new Response<>(movieServiceImpl.getUserRecommendation(userId));
         return ResponseEntity.ok(resp);
     }
 
     /**
-     * This function is used to update movie recommendation by user.
+     * The user rate the movie.
+     * This function will trigger the Spark recommendation analysis
+     * according to the movie rating (rating score: 1-5)
      * @param userId
-     * @param movie: the movie user clicked
+     * @param movie: the movie user rated, it's a MoviePOJO like object
      * @return
      */
     @PutMapping(value = "/{userId}")
-    public ResponseEntity<Response> updateRecommendation(@PathVariable String userId, @RequestBody Movie movie) {
-        movieServiceImpl.updateUserRecommendation(userId, movie);
-        return null;
+    public ResponseEntity<Void> updateMovieRating(@PathVariable String userId, @RequestBody Map<String, String> movie) {
+        movieServiceImpl.updateMovieRating(userId, movie);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "/genre")
-    public ResponseEntity<Response> getMoviesByGenre(@RequestParam String genre, @RequestParam String userId, @RequestParam Long page) {
-        Response resp = new Response(movieServiceImpl.getMoviesByGenre(genre, userId, pageSize, page));
+    public ResponseEntity<Response<MoviePOJO>> getMoviesByGenre(@RequestParam String genre, @RequestParam String userId, @RequestParam Long page) {
+        Response<MoviePOJO> resp = new Response<>(movieServiceImpl.getMoviesByGenre(genre, userId, pageSize, page));
         return ResponseEntity.ok(resp);
     }
 
+    /**
+     * @param genre
+     * @return: total number of movies according to the current genre
+     */
     @GetMapping(value = "/count/genre")
-    public ResponseEntity<Response> countMoviesByGenre(@RequestParam String genre) {
-        Response resp = new Response(movieServiceImpl.countMoviesByGenre(genre));
+    public ResponseEntity<Response<Long>> countMoviesByGenre(@RequestParam String genre) {
+        Response<Long> resp = new Response<>(movieServiceImpl.countMoviesByGenre(genre));
         return ResponseEntity.ok(resp);
     }
 

@@ -1,16 +1,21 @@
 package com.tianju.memeo.interfaces;
 
-/**
- * Pojo interface. Used for serializing complex joined query results
- */
 public interface MoviePOJO {
     Long getMovieId();
+
     Long getImdbId();
+
     String getTitle();
+
     String getGenres();
+
     Double getRating();
-    Long getRater();
+
+    Integer getRater();
+
     String getUserId();
-    String getUserRating();
+
+    Integer getUserRating();
+
     String getTimestamp();
 }

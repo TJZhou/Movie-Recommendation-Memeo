@@ -29,9 +29,20 @@
         </mat-card-header>
         <!-- <img mat-card-image src="assets/images/Forrest-Gump.jpg" alt="{{movieRecommendation.title}}"> -->
         <mat-card-content>
-          <p>Rating:{{movie.rating}}</p>
+          <p>
+            <span>Rating:</span>
+            <star-rating [starType]="'svg'" [readOnly]="true" [rating]="movie.rating" [showHalfStars]="true"></star-rating>
+          </p>
+          <p><span>Leave Your Rate:</span>
+            <span *ngIf="movie.userRating">
+              <star-rating [starType]="'svg'" [rating]="movie.userRating" [showHalfStars]="true" [hoverEnabled]="true" (starClickChange)="rateTheMovie($event, movie)"></star-rating>
+            </span>
+            <span *ngIf="!movie.userRating">
+              <star-rating [starType]="'svg'" [rating]="0" [showHalfStars]="true" [hoverEnabled]="true" (starClickChange)="rateTheMovie($event, movie)"></star-rating>
+            </span>
+          </p>
           <span>imdb link: </span>
-          <a href="https://www.imdb.com/title/tt0{{movie.imdbId}}" (click)="clickMovieLink(movie)" target="_blank">
+          <a href="https://www.imdb.com/title/tt0{{movie.imdbId}}" target="_blank">
             https://www.imdb.com/title/tt0{{movie.imdbId}}
           </a>
         </mat-card-content>

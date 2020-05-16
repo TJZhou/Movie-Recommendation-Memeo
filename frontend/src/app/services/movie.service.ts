@@ -34,7 +34,7 @@ export class MovieService {
     return this.http.get<NumberResponse>(this.movieUrl + 'count/genre', {params});
   }
 
-  public updateRecommendation(userId: string, movie: Movie): Observable<void> {
+  public updateMovieRating(userId: string, movie: Movie): Observable<void> {
     return this.http.put<void>(this.movieUrl + userId, movie);
   }
 }

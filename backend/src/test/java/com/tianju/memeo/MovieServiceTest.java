@@ -1,6 +1,7 @@
 package com.tianju.memeo;
 
 import com.tianju.memeo.model.Movie;
+import com.tianju.memeo.model.MovieRating;
 import com.tianju.memeo.service.MovieServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,7 @@ import org.testng.Assert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {MemeoApplication.class})
@@ -34,5 +36,13 @@ public class MovieServiceTest {
 //        List<Movie> movies = movieServiceImpl.getUserRecommendation("test-user");
 //        Assert.assertTrue(movies.get(0).getMovieId() == 199);
 //        Assert.assertTrue(movies.get(1).getMovieId() == 100);
+    }
+
+    @Test
+    public void movieRatingTest() {
+        Optional<MovieRating> movieRating = movieServiceImpl.getMovieRating("test-user", 123L);
+        Assert.assertFalse(movieRating.isPresent());
+        movieRating = movieServiceImpl.getMovieRating("test-user", 296L);
+        Assert.assertTrue(movieRating.isPresent());
     }
 }

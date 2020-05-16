@@ -85,7 +85,6 @@ export class MainPageComponent implements OnInit {
     this.router.navigate([], {queryParams: {'genre': genre}});
     this.isLoading = true;
     this.movieService.getMoviesByGenre(genre, this.username, this.page - 1).subscribe(res => {
-      console.log(res);
       const response: MovieResponse = res;
       this.movies = response.data;
       this.isLoading = false;
@@ -116,7 +115,8 @@ export class MainPageComponent implements OnInit {
     }
   }
 
-  clickMovieLink(movie: Movie): void {
-    this.movieService.updateRecommendation(this.username, movie).subscribe();
+  rateTheMovie(event: any, movie: Movie): void {
+    movie.userRating = event.rating;
+    this.movieService.updateMovieRating(this.username, movie).subscribe();
   }
 }
