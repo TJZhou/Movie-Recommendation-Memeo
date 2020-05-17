@@ -2,8 +2,10 @@ package com.tianju.memeo.service
 
 import java.sql.{Connection, ResultSet}
 
-import com.tianju.memeo.model.MemeoMovieLog
+import com.tianju.memeo.model._
 import com.tianju.memeo.resource.Queries
+
+import scala.collection.mutable.ListBuffer
 
 object MySqlConnectionService{
 
@@ -43,26 +45,49 @@ object MySqlConnectionService{
    * Get recent user log. There data will be used
    * for real time analysis and movie recommendation
    */
-  def selectRecentRatingLogByUser(userId: String): List[MemeoMovieLog] = {
+  def selectRecentRatingLogByUser(userId: String): ListBuffer[MemeoMovieLog] = {
     val connection: Connection = MySqlConnectionPool.connectionPool.getConnection()
     val statement = connection.prepareStatement(Queries.RECENT_RATING_BY_USER)
     try{
       statement.setString(1, userId)
       val rs: ResultSet = statement.executeQuery()
-      var movieList = List[MemeoMovieLog]()
+      var movieList = ListBuffer[MemeoMovieLog]()
       while(rs.next()) {
         val timestamp = rs.getTimestamp("timestamp")
-        val userId = rs.getString("userId")
-        val movieId = rs.getLong("movieId")
+        val userId = rs.getString("user_id")
+        val movieId = rs.getLong("movie_id")
         val title = rs.getString("title")
         val genres = rs.getString("genres")
         val rating = rs.getInt("rating");
-        movieList ::= new MemeoMovieLog(timestamp, userId, movieId, title, genres, rating)
+        movieList += new MemeoMovieLog(timestamp, userId, movieId, title, genres, rating)
       }
       movieList
     } catch {
       case e: Exception => e.printStackTrace()
-        Nil
+      ListBuffer.empty
+    } finally {
+      statement.close()
+      connection.close()
+    }
+  }
+
+  def getMovieRatings(): ListBuffer[MovieRating] = {
+    val connection: Connection = MySqlConnectionPool.connectionPool.getConnection()
+    val statement = connection.createStatement()
+    try {
+      val rs: ResultSet = statement.executeQuery(Queries.GET_USER_RATING)
+      val movieRatingList = new ListBuffer[MovieRating]()
+      while(rs.next()) {
+        val userId = rs.getString("user_id")
+        val movieId = rs.getLong("movie_id")
+        val rating = rs.getInt("rating");
+        val timestamp = rs.getTimestamp("timestamp")
+        movieRatingList += MovieRating(userId, movieId, rating, timestamp)
+      }
+      movieRatingList
+    } catch {
+      case e: Exception => e.printStackTrace()
+      ListBuffer.empty
     } finally {
       statement.close()
       connection.close()

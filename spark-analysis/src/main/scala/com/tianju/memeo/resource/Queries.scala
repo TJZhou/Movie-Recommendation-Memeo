@@ -13,4 +13,7 @@ object Queries {
 
   final val UPDATE_MOVIE_RECOMMENDATION =
     "INSERT INTO movie_recommend() VALUES(?,?)"
+
+  final val GET_USER_RATING =
+    "SELECT * FROM memeo.movie_rating"
 }

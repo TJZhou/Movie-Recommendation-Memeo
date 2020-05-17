@@ -1,10 +1,10 @@
-package com.tianju.memeo
+package com.tianju.memeo.app
 
 import com.tianju.memeo.service.RecommendationService
 import org.apache.kafka.common.serialization.StringDeserializer
-import org.apache.spark._
-import org.apache.spark.streaming._
-import org.apache.spark.streaming.kafka010._
+import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
+import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.{SparkConf, SparkContext}
 
 object SparkStreamApp extends App {
 
