@@ -2,6 +2,7 @@ package com.tianju.memeo.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * The movie rated by user
@@ -15,13 +16,13 @@ public class MovieRating implements Serializable {
     @Id
     private Long movieId;
     private Integer rating;
-    private String timestamp;
+    private Timestamp timestamp;
 
     public MovieRating() {
 
     }
 
-    public MovieRating(String userId, Long movieId, Integer rating, String timestamp) {
+    public MovieRating(String userId, Long movieId, Integer rating, Timestamp timestamp) {
         this.userId = userId;
         this.movieId = movieId;
         this.rating = rating;
@@ -52,11 +53,11 @@ public class MovieRating implements Serializable {
         this.rating = rating;
     }
 
-    public String getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 

@@ -39,16 +39,12 @@ public class MovieServiceImpl {
         if (!userExists) {
             initUserRecommendation(userId);
         }
-        Collection<MoviePOJO> movies = movieRepository.findRecommendedMovieByUserId(userId);
-        return movies;
+        return movieRepository.findRecommendedMovieByUserId(userId);
     }
 
     /**
      * If this is the first time users use this system.
      * Create a default recommend movie list with the 10 most popular movies.
-     *
-     * @param userId
-     * @return String
      */
     private void initUserRecommendation(String userId) {
         Collection<Movie> mostPopularMovies = movieRepository.findMostPopularMovies();
@@ -71,17 +67,13 @@ public class MovieServiceImpl {
      * Note: this is not an "asynchronized" process. The movie clicked by current user will
      * be added to the flume user log. And Kafka & Spark will consume the log data. After
      * Spark finishes the ASL algorithm the recommended movie will be updated to the database.
-     *
-     * @param userId
-     * @param movie
-     * @return: Nothing in current process.
      */
     public void updateMovieRating(String userId, Map<String, String> movie) {
         Long movieId = Long.parseLong(movie.get("movieId"));
         Integer userRating = Integer.parseInt(movie.get("userRating"));
         String genres = movie.get("genres");
         String title = movie.get("title");
-        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         MovieRating movieRating = getMovieRating(userId, movieId)
                 .orElse(new MovieRating(userId, movieId, userRating, timestamp));
         movieRating.setRating(userRating);
