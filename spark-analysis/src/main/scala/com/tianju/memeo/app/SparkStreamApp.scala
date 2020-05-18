@@ -1,6 +1,5 @@
 package com.tianju.memeo.app
 
-import com.tianju.memeo.service.RecommendationService
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
@@ -8,7 +7,8 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 object SparkStreamApp extends App {
 
-  // Create a new Spark Context
+
+    // Create a new Spark Context
   val conf = new SparkConf().setAppName("Memeo").setMaster("local[*]")
   val sc = new SparkContext(conf)
   sc.setLogLevel("WARN")
@@ -30,7 +30,6 @@ object SparkStreamApp extends App {
     ConsumerStrategies.Subscribe[String, String](topics, kafkaParams)
   )
 
-  RecommendationService.streamProcess(stream)
   ssc.start()
   ssc.awaitTermination()
 }

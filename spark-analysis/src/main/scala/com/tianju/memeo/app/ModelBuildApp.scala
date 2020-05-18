@@ -8,8 +8,8 @@ import org.apache.spark.ml.recommendation.ALS
 import org.apache.spark.sql.SparkSession
 
 object ModelBuildApp extends App{
-//  Logger.getLogger("spark").setLevel(Level.OFF)
-//  Logger.getLogger("org").setLevel(Level.OFF)
+  Logger.getLogger("spark").setLevel(Level.OFF)
+  Logger.getLogger("org").setLevel(Level.OFF)
 
   val spark = SparkSession.builder().appName("MovieRate").master("local[*]").getOrCreate()
 
@@ -19,15 +19,16 @@ object ModelBuildApp extends App{
 
   prop.put("user", Resource.dbUser)
   prop.put("password", Resource.dbPassword)
+
   val DS = spark.read
     .jdbc(Resource.dbUrl,"movie_rating",prop)
     .withColumnRenamed("user_id", "userId")
     .withColumnRenamed("movie_id", "movieId")
     .as[MovieRating]
 
-  val ratingData = for(row <- DS) yield (MovieRatingNewScheme(row.userId.hashCode, row.movieId, row.rating, row.timestamp))
+//  val ratingData = for(row <- DS) yield (MovieRatingNewScheme(row.userId.hashCode, row.movieId, row.rating, row.timestamp))
 
-  val Array(trainingData, testData) = ratingData.randomSplit(Array(0.8, 0.2))
+  val Array(trainingData, testData) = DS.randomSplit(Array(0.8, 0.2))
 
   val als = new ALS()
     .setMaxIter(20)
@@ -46,6 +47,8 @@ object ModelBuildApp extends App{
     .setPredictionCol("prediction")
   val rmse = evaluator.evaluate(predictions)
   println(s"Root-mean-square error = $rmse")
+
+  model.save("src/data/movie_recommendation_v1.model")
 
   val userRecs = model.recommendForAllUsers(10)
 

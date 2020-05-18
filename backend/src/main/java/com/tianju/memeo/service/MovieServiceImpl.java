@@ -34,7 +34,7 @@ public class MovieServiceImpl {
         this.movieRatingRepository = movieRatingRepository;
     }
 
-    public Collection<MoviePOJO> getUserRecommendation(String userId) {
+    public Collection<MoviePOJO> getUserRecommendation(Long userId) {
         boolean userExists = movieRecommendedRepository.existsByUserId(userId);
         if (!userExists) {
             initUserRecommendation(userId);
@@ -46,14 +46,14 @@ public class MovieServiceImpl {
      * If this is the first time users use this system.
      * Create a default recommend movie list with the 10 most popular movies.
      */
-    private void initUserRecommendation(String userId) {
+    private void initUserRecommendation(Long userId) {
         Collection<Movie> mostPopularMovies = movieRepository.findMostPopularMovies();
         for(Movie movie: mostPopularMovies) {
             movieRecommendedRepository.save(new MovieRecommend(userId, movie.getMovieId()));
         }
     }
 
-    public Collection<MoviePOJO> getMoviesByGenre(String genre, String userId, Long pageSize, Long page) {
+    public Collection<MoviePOJO> getMoviesByGenre(String genre, Long userId, Long pageSize, Long page) {
         return movieRepository.findMoviesByGenre('%' + genre + '%', userId, pageSize, page * pageSize);
     }
 
@@ -68,7 +68,7 @@ public class MovieServiceImpl {
      * be added to the flume user log. And Kafka & Spark will consume the log data. After
      * Spark finishes the ASL algorithm the recommended movie will be updated to the database.
      */
-    public void updateMovieRating(String userId, Map<String, String> movie) {
+    public void updateMovieRating(Long userId, Map<String, String> movie) {
         Long movieId = Long.parseLong(movie.get("movieId"));
         Integer userRating = Integer.parseInt(movie.get("userRating"));
         String genres = movie.get("genres");
@@ -87,7 +87,7 @@ public class MovieServiceImpl {
         }
     }
 
-    public Optional<MovieRating> getMovieRating(String userId, Long movieId) {
+    public Optional<MovieRating> getMovieRating(Long userId, Long movieId) {
         return movieRatingRepository.findById(new MovieRatingId(userId, movieId));
     }
 }

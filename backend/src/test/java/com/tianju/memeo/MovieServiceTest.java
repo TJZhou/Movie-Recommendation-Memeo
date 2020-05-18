@@ -40,9 +40,9 @@ public class MovieServiceTest {
 
     @Test
     public void movieRatingTest() {
-        Optional<MovieRating> movieRating = movieServiceImpl.getMovieRating("test-user", 123L);
+        Optional<MovieRating> movieRating = movieServiceImpl.getMovieRating(10000L, 123L);
         Assert.assertFalse(movieRating.isPresent());
-        movieRating = movieServiceImpl.getMovieRating("test-user", 296L);
+        movieRating = movieServiceImpl.getMovieRating(10000L, 296L);
         Assert.assertTrue(movieRating.isPresent());
     }
 }

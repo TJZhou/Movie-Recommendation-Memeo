@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Table(name = "movie_rating")
 public class MovieRating implements Serializable {
     @Id
-    private String userId;
+    private Long userId;
     @Id
     private Long movieId;
     private Integer rating;
@@ -22,18 +22,18 @@ public class MovieRating implements Serializable {
 
     }
 
-    public MovieRating(String userId, Long movieId, Integer rating, Timestamp timestamp) {
+    public MovieRating(Long userId, Long movieId, Integer rating, Timestamp timestamp) {
         this.userId = userId;
         this.movieId = movieId;
         this.rating = rating;
         this.timestamp = timestamp;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

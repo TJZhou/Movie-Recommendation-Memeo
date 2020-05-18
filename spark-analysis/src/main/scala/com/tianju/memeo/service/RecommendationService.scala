@@ -6,6 +6,8 @@ import org.apache.spark.streaming.dstream.InputDStream
 
 object RecommendationService {
 
+
+
   def streamProcess(stream: InputDStream[ConsumerRecord[String, String]]): Unit = {
     val memeoMovieLog = stream
       .map(_.value.split("--"))

@@ -19,7 +19,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "where m.genres like ?1 " +
             "order by m.rater desc " +
             "limit ?3 offset ?4 ", nativeQuery = true)
-    Collection<MoviePOJO> findMoviesByGenre(String genres, String userId, Long pageSize, Long page);
+    Collection<MoviePOJO> findMoviesByGenre(String genres, Long userId, Long pageSize, Long page);
 
     @Query(value =
             "select m.movie_id as movieId, m.imdb_id as imdbId, m.genres, m.rating, m.rater, m.title, " +
@@ -29,7 +29,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "left join " +
             "memeo.movie_rating mr " +
             "on m.movie_id = mr.movie_id and md.user_id = mr.user_id ", nativeQuery = true)
-    Collection<MoviePOJO> findRecommendedMovieByUserId(String userId);
+    Collection<MoviePOJO> findRecommendedMovieByUserId(Long userId);
 
     @Query(value = "select count(*) from movie where genres like ?1", nativeQuery = true)
     Long countMoviesByGenre(String genres);

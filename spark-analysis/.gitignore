@@ -5,6 +5,7 @@
 *.class
 *.log
 *.csv
+*.model
 
 target/
 project/target/

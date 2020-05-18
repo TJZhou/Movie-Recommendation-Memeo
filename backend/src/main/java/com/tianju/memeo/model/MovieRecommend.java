@@ -11,23 +11,23 @@ import java.io.Serializable;
 @Table(name = "movie_recommend")
 public class MovieRecommend implements Serializable {
     @Id
-    private String userId;
+    private Long userId;
     @Id
     private Long movieId;
 
     public MovieRecommend() {
     }
 
-    public MovieRecommend(String userId, Long movieId) {
+    public MovieRecommend(Long userId, Long movieId) {
         this.userId = userId;
         this.movieId = movieId;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

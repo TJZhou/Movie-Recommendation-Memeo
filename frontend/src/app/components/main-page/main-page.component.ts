@@ -1,3 +1,4 @@
+import { UserService } from './../../services/user.service';
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -5,6 +6,7 @@ import { Movie, MovieResponse } from '../../models/movie.model';
 import { NumberResponse } from './../../models/response.model';
 import { MovieService } from './../../services/movie.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { User } from 'src/app/models/user.model';
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
@@ -14,6 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class MainPageComponent implements OnInit {
 
   username: string;
+  userId: number;
   isLoading = true;
   movies: Movie[];
   genres = ['Action', 'Comedy', 'Thriller', 'Crime', 'Sci-Fi', 'Animation', 'Fantasy', 'Drama', 'Romance'];
@@ -26,34 +29,50 @@ export class MainPageComponent implements OnInit {
 
   constructor(public auth: AuthService,
               public movieService: MovieService,
+              public userService: UserService,
               public activatedRoute: ActivatedRoute,
               public router: Router,
               public errorMessage: MatSnackBar) {
-    this.page = 1;
-    auth.userProfile$.subscribe(res => {
-      if (res !== null && res !== undefined) {
-        this.username = res.name;
-      }
-    });
+                this.page = 1;
+                this.isLoading = true;
+              }
+
+  ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.queryParamGenre = params['genre'];
     });
-  }
-
-  ngOnInit() {
-      if (this.queryParamGenre === 'Recommended' || this.queryParamGenre === undefined) {
-        this.getMovieRecommendation();
+    // get username and userId; if the localStorage is null then create user
+    this.auth.userProfile$.subscribe(async res => {
+      this.username = res.name;
+      if (localStorage.getItem('userId') === undefined || localStorage.getItem('userId') == null) {
+          const user = new User();
+          user.userId = null;
+          user.username = this.username;
+          await this.userService.createUser(user).subscribe(resp => {
+            localStorage.setItem('userId', resp.data[0].userId.toString());
+            this.userId = parseInt(localStorage.getItem('userId'), 10);
+            if (this.queryParamGenre === 'Recommended' || this.queryParamGenre === undefined) {
+              this.getMovieRecommendation();
+            } else {
+              this.listMoviesByGenre(this.queryParamGenre);
+            }
+          });
       } else {
-        this.listMoviesByGenre(this.queryParamGenre);
+        this.userId = parseInt(localStorage.getItem('userId'), 10);
+        if (this.queryParamGenre === 'Recommended' || this.queryParamGenre === undefined) {
+          this.getMovieRecommendation();
+        } else {
+          this.listMoviesByGenre(this.queryParamGenre);
+        }
       }
+    });
   }
 
   getMovieRecommendation(): void {
     this.router.navigate([], {queryParams: {'genre': 'Recommended'}});
     this.page = 1;
     this.pageArr = [1];
-    this.isLoading = true;
-    this.movieService.getMovieRecommendation(this.username).subscribe(res => {
+    this.movieService.getMovieRecommendation(this.userId).subscribe(res => {
       const response: MovieResponse = res;
       this.movies = response.data;
       this.isLoading = false;
@@ -83,8 +102,7 @@ export class MainPageComponent implements OnInit {
     }
     this.prevGenreSelected = genre;
     this.router.navigate([], {queryParams: {'genre': genre}});
-    this.isLoading = true;
-    this.movieService.getMoviesByGenre(genre, this.username, this.page - 1).subscribe(res => {
+    this.movieService.getMoviesByGenre(genre, this.userId, this.page - 1).subscribe(res => {
       const response: MovieResponse = res;
       this.movies = response.data;
       this.isLoading = false;
@@ -117,6 +135,11 @@ export class MainPageComponent implements OnInit {
 
   rateTheMovie(event: any, movie: Movie): void {
     movie.userRating = event.rating;
-    this.movieService.updateMovieRating(this.username, movie).subscribe();
+    this.movieService.updateMovieRating(this.userId, movie).subscribe();
+  }
+
+  logout() {
+    localStorage.clear();
+    this.auth.logout();
   }
 }

@@ -24,7 +24,7 @@ public class MovieController {
     }
 
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<Response<MoviePOJO>> getRecommendedMovieByUser(@PathVariable String userId) {
+    public ResponseEntity<Response<MoviePOJO>> getRecommendedMovieByUser(@PathVariable Long userId) {
         Response<MoviePOJO> resp = new Response<>(movieServiceImpl.getUserRecommendation(userId));
         return ResponseEntity.ok(resp);
     }
@@ -38,13 +38,13 @@ public class MovieController {
      * @return
      */
     @PutMapping(value = "/{userId}")
-    public ResponseEntity<Void> updateMovieRating(@PathVariable String userId, @RequestBody Map<String, String> movie) {
+    public ResponseEntity<Void> updateMovieRating(@PathVariable Long userId, @RequestBody Map<String, String> movie) {
         movieServiceImpl.updateMovieRating(userId, movie);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "/genre")
-    public ResponseEntity<Response<MoviePOJO>> getMoviesByGenre(@RequestParam String genre, @RequestParam String userId, @RequestParam Long page) {
+    public ResponseEntity<Response<MoviePOJO>> getMoviesByGenre(@RequestParam String genre, @RequestParam Long userId, @RequestParam Long page) {
         Response<MoviePOJO> resp = new Response<>(movieServiceImpl.getMoviesByGenre(genre, userId, pageSize, page));
         return ResponseEntity.ok(resp);
     }
