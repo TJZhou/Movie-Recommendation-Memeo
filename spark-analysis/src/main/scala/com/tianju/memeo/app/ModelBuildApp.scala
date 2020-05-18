@@ -2,6 +2,7 @@ package com.tianju.memeo.app
 
 import com.tianju.memeo.model._
 import com.tianju.memeo.resource.Resource
+import com.tianju.memeo.service.MySqlConnectionService
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.evaluation.RegressionEvaluator
 import org.apache.spark.ml.recommendation.ALS
@@ -26,8 +27,6 @@ object ModelBuildApp extends App{
     .withColumnRenamed("movie_id", "movieId")
     .as[MovieRating]
 
-//  val ratingData = for(row <- DS) yield (MovieRatingNewScheme(row.userId.hashCode, row.movieId, row.rating, row.timestamp))
-
   val Array(trainingData, testData) = DS.randomSplit(Array(0.8, 0.2))
 
   val als = new ALS()
@@ -48,9 +47,16 @@ object ModelBuildApp extends App{
   val rmse = evaluator.evaluate(predictions)
   println(s"Root-mean-square error = $rmse")
 
-  model.save("src/data/movie_recommendation_v1.model")
+//  save model is necessary
+//  model.save("src/data/movie_recommendation_v1.model")
 
-  val userRecs = model.recommendForAllUsers(10)
+  // count user who gives rating
+  println(trainingData.select("userId").distinct().count())
 
-  userRecs.take(10).foreach(x => println(x))
+  // update movie recommendations
+  val recommendations = model.recommendForAllUsers(10).as[ALSModel]
+  recommendations.foreach(x => {
+    MySqlConnectionService.deleteOlderRecommendation(x.userId)
+    MySqlConnectionService.updateMovieRecommendation(x.userId, x.recommendations.map(_._1))
+  })
 }

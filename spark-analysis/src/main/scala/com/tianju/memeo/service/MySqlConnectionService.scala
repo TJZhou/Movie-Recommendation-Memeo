@@ -5,15 +5,15 @@ import java.sql.{Connection, ResultSet}
 import com.tianju.memeo.model._
 import com.tianju.memeo.resource.Queries
 
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 object MySqlConnectionService{
 
-  def deleteOlderRecommendation(userId: String): Unit = {
+  def deleteOlderRecommendation(userId: Long): Unit = {
     val connection: Connection = MySqlConnectionPool.connectionPool.getConnection()
     val statement = connection.prepareStatement(Queries.DELETE_OLDER_RECOMMENDATION)
     try {
-      statement.setString(1, userId)
+      statement.setLong(1, userId)
       statement.execute()
     } catch {
       case e: Exception => e.printStackTrace()
@@ -23,13 +23,13 @@ object MySqlConnectionService{
     }
   }
 
-  def updateMovieRecommendation(movieIds: List[Long], userId: String): Unit = {
+  def updateMovieRecommendation(userId: Long, movieIds: ArrayBuffer[Long]): Unit = {
     val connection: Connection = MySqlConnectionPool.connectionPool.getConnection()
     val statement = connection.prepareStatement(Queries.UPDATE_MOVIE_RECOMMENDATION)
     try {
       movieIds.foreach(movieId => {
-        statement.setLong(1, movieId)
-        statement.setString(2, userId)
+        statement.setLong(1, userId)
+        statement.setLong(2, movieId)
         statement.addBatch()
       })
       statement.executeBatch()
@@ -78,7 +78,7 @@ object MySqlConnectionService{
       val rs: ResultSet = statement.executeQuery(Queries.GET_USER_RATING)
       val movieRatingList = new ListBuffer[MovieRating]()
       while(rs.next()) {
-        val userId = rs.getString("user_id")
+        val userId = rs.getInt("user_id")
         val movieId = rs.getLong("movie_id")
         val rating = rs.getInt("rating");
         val timestamp = rs.getTimestamp("timestamp")

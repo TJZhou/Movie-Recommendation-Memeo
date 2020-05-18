@@ -5,10 +5,10 @@ import java.sql.Timestamp
 import com.tianju.memeo.model._
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{DataFrame, Dataset, Encoders, SparkSession}
+import org.apache.spark.sql.{Dataset, Encoders, SparkSession}
 
 /**
- *  Data preprocess.
+ *  Data preprocess & Data cleaning
  */
 object DataPreProcessApp extends App{
 
@@ -38,7 +38,7 @@ object DataPreProcessApp extends App{
 
   // change timestamp to sql timestamp format
   val newRatingDS : Dataset[MovieRating] =
-    for(rating <- ratingDS) yield MovieRating(rating.userId, rating.movieId, rating.rating, new Timestamp(rating.timestamp))
+    for(rating <- ratingDS) yield MovieRating(rating.userId.toInt, rating.movieId, rating.rating, new Timestamp(rating.timestamp))
   newRatingDS.write.option("header","true").csv("src/rating.csv")
 
   // aggregate all ratings by movieId and calculate the average rating.
