@@ -9,6 +9,10 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
+  // Create subject and public observable for handleAuthCallback status
+private handleAuthCallbackCompleteSubject$ = new BehaviorSubject<boolean>(false);
+handleAuthCallbackComplete$ = this.handleAuthCallbackCompleteSubject$.asObservable();
+
   // Create an observable of Auth0 instance of client
   auth0Client$ = (from(
     createAuth0Client({
@@ -91,33 +95,34 @@ export class AuthService {
     });
   }
 
-  private handleAuthCallback() {
-    // Call when app reloads after user logs in with Auth0
-    const params = window.location.search;
-    if (params.includes('code=') && params.includes('state=')) {
-      let targetRoute: string; // Path to redirect to after login processsed
-      const authComplete$ = this.handleRedirectCallback$.pipe(
-        // Have client, now call method to handle auth callback redirect
-        tap(cbRes => {
-          // Get and set target redirect route from callback results
-          targetRoute = cbRes.appState && cbRes.appState.target ? cbRes.appState.target : '/';
-        }),
-        concatMap(() => {
-          // Redirect callback complete; get user and login status
-          return combineLatest([
-            this.getUser$(),
-            this.isAuthenticated$
-          ]);
-        })
-      );
-      // Subscribe to authentication completion observable
-      // Response will be an array of user and login status
-      authComplete$.subscribe(([user, loggedIn]) => {
-        // Redirect to target route after callback processing
-        this.router.navigate([targetRoute]);
-      });
-    }
-  }
+
+private handleAuthCallback() {
+  // Call when app reloads after user logs in with Auth0
+  const params = window.location.search;
+  if (params.includes('code=') && params.includes('state=')) {
+    let targetRoute: string; // Path to redirect to after login processed
+    const authComplete$ = this.handleRedirectCallback$.pipe(
+      // Have client, now call method to handle auth callback redirect
+      tap(cbRes => {
+        // Get and set target redirect route from callback results
+        targetRoute = cbRes.appState && cbRes.appState.target ? cbRes.appState.target : '/';
+      }),
+      concatMap(() => {
+        // Redirect callback complete; get user and login status
+        return combineLatest([this.getUser$(), this.isAuthenticated$]);
+      }),
+    );
+    // Subscribe to authentication completion observable
+    // Response will be an array of user and login status
+    authComplete$.subscribe(([user, loggedIn]) => {
+      this.handleAuthCallbackCompleteSubject$.next(true);
+      // Redirect to target route after callback processing
+      this.router.navigate([targetRoute]);
+    });
+  } else {
+    this.handleAuthCallbackCompleteSubject$.next(true);
+ }
+}
 
   logout() {
     // Ensure Auth0 client instance exists
