@@ -26,10 +26,10 @@ public class UserServiceImpl {
     }
 
     public User getUserById(Long id) {
-        return userRepository.getUserByUserId(id).orElseThrow(() -> {throw new NoSuchElementException("User Not Found");});
+        return userRepository.getUserByUserId(id).orElseThrow(NoSuchElementException::new);
     }
 
     public User getUserByUsername(String username) {
-        return userRepository.getUserByUsername(username).orElseThrow(() -> {throw new NoSuchElementException("User Not Found");});
+        return userRepository.getUserByUsername(username).orElseThrow(NoSuchElementException::new);
     }
 }

@@ -14,7 +14,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(value =
             "select m.movie_id as movieId, m.imdb_id as imdbId, m.genres, m.rating, m.rater, m.title, " +
             "mr.user_id as userId, mr.rating as userRating, mr.timestamp from " +
-            "memeo.movie m left join memeo.movie_rating mr " +
+            "movie m left join movie_rating mr " +
             "on m.movie_id = mr.movie_id and mr.user_id = ?2 " +
             "where m.genres like ?1 " +
             "order by m.rater desc " +
@@ -24,10 +24,10 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(value =
             "select m.movie_id as movieId, m.imdb_id as imdbId, m.genres, m.rating, m.rater, m.title, " +
             "mr.user_id as userId, mr.rating as userRating, mr.timestamp from " +
-            "(memeo.movie_recommend md inner join memeo.movie m " +
+            "(movie_recommend md inner join movie m " +
             "on md.user_id = ?1 and m.movie_id = md.movie_id) " +
             "left join " +
-            "memeo.movie_rating mr " +
+            "movie_rating mr " +
             "on m.movie_id = mr.movie_id and md.user_id = mr.user_id ", nativeQuery = true)
     Collection<MoviePOJO> findRecommendedMovieByUserId(Long userId);
 
