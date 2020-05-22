@@ -13,8 +13,8 @@
   <mat-button-toggle-group  #group="matButtonToggleGroup">
     <mat-button-toggle  mat-raised-button (click)="getMovieRecommendation()">Recommended</mat-button-toggle>
     <mat-button-toggle  mat-raised-button (click)="listMoviesByGenre('')">All Movies</mat-button-toggle>
-    <ng-container *ngFor="let genres of genres">
-      <mat-button-toggle mat-raised-button (click)="listMoviesByGenre(genres)">{{genres}}</mat-button-toggle>
+    <ng-container *ngFor="let genre of genres">
+      <mat-button-toggle mat-raised-button (click)="listMoviesByGenre(genre)">{{genre}}</mat-button-toggle>
     </ng-container>
   </mat-button-toggle-group>
 </div>
@@ -27,7 +27,6 @@
           <mat-card-title>{{movie.title}}</mat-card-title>
           <mat-card-subtitle>{{movie.genres}}</mat-card-subtitle>
         </mat-card-header>
-        <!-- <img mat-card-image src="assets/images/Forrest-Gump.jpg" alt="{{movieRecommendation.title}}"> -->
         <mat-card-content>
           <p>
             <span>Rating:</span>
@@ -59,7 +58,7 @@
   <mat-form-field class="footer page-field">
     <mat-label>Page</mat-label>
     <mat-select [(value)]="page">
-      <mat-option *ngFor="let pageNum of pageArr" [(value)]="pageNum">{{pageNum}}</mat-option>
+      <mat-option *ngFor="let pageNumber of pageArr" [value]="pageNumber">{{pageNumber}}</mat-option>
     </mat-select>
   </mat-form-field>
   <button class="footer" mat-raised-button (click)="goToPage(page)">Go</button>

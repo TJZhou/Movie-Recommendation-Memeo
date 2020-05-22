@@ -127,7 +127,6 @@ export class MainPageComponent implements OnInit {
         duration: 1800,
       });
     } else {
-      console.log(newPage);
       this.page = newPage;
       this.listMoviesByGenre(this.prevGenreSelected);
     }
