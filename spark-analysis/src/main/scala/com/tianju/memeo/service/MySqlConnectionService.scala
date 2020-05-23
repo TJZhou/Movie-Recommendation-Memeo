@@ -1,10 +1,8 @@
 package com.tianju.memeo.service
 
 import java.sql.{Connection, ResultSet}
-
 import com.tianju.memeo.model._
 import com.tianju.memeo.resource.Queries
-
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 object MySqlConnectionService{

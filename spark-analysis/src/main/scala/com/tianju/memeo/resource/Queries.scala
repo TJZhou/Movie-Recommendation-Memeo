@@ -9,7 +9,7 @@ object Queries {
     "WHERE TO_DAYS( NOW( ) ) - TO_DAYS( mr.timestamp) <= 7 AND mr.user_id = ? "
 
   final val DELETE_OLDER_RECOMMENDATION =
-    "DELETE FROM movie_recommend mr WHERE mr.user_id = ?"
+    "DELETE FROM movie_recommend WHERE user_id = ?"
 
   final val UPDATE_MOVIE_RECOMMENDATION =
     "INSERT INTO movie_recommend() VALUES(?,?)"

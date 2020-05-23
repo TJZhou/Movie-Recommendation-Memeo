@@ -2,7 +2,7 @@ package com.tianju.memeo.app
 
 import com.tianju.memeo.model._
 import com.tianju.memeo.resource.Resource
-import com.tianju.memeo.service.MySqlConnectionService
+import com.tianju.memeo.service.{MySqlConnectionPool, MySqlConnectionService}
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.evaluation.RegressionEvaluator
 import org.apache.spark.ml.recommendation.ALS
@@ -29,8 +29,10 @@ object ModelBuildApp extends App{
 
   val Array(trainingData, testData) = DS.randomSplit(Array(0.8, 0.2))
 
+  trainingData.persist()
+
   val als = new ALS()
-    .setMaxIter(20)
+    .setMaxIter(10)
     .setRegParam(0.01)
     .setUserCol("userId")
     .setItemCol("movieId")
@@ -59,4 +61,6 @@ object ModelBuildApp extends App{
     MySqlConnectionService.deleteOlderRecommendation(x.userId)
     MySqlConnectionService.updateMovieRecommendation(x.userId, x.recommendations.map(_._1))
   })
+
+  MySqlConnectionPool.connectionPool.close()
 }
