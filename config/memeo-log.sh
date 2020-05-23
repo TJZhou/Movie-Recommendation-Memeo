@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# used for cron event. Archive log data every day.
 FILE=/Users/steve/Courses/memeo/backend/log-user/memeo-user.log
 if test -f "$FILE"; then
 	# kill flume first

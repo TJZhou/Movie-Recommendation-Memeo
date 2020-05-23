@@ -1,0 +1,39 @@
+CREATE TABLE `movie` (
+  `movie_id` int NOT NULL,
+  `imdb_id` int NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `genres` varchar(100) DEFAULT NULL,
+  `rating` double DEFAULT NULL,
+  `rater` int DEFAULT NULL,
+  PRIMARY KEY (`movie_id`),
+  UNIQUE KEY `movie_id_UNIQUE` (`movie_id`),
+  UNIQUE KEY `imdb_id_UNIQUE` (`imdb_id`),
+  KEY `rater` (`rater`),
+  KEY `genres` (`genres`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `memeo_user` (
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10005 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `movie_rating` (
+  `user_id` int NOT NULL,
+  `movie_id` int NOT NULL,
+  `rating` double NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`user_id`,`movie_id`),
+  KEY `movie_id_idx` (`movie_id`),
+  CONSTRAINT `movie_id_rating` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`movie_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `movie_recommend` (
+  `user_id` int NOT NULL,
+  `movie_id` int NOT NULL,
+  PRIMARY KEY (`user_id`,`movie_id`),
+  KEY `movie_id_idx` (`movie_id`),
+  CONSTRAINT `movie_id_recommend` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`movie_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
