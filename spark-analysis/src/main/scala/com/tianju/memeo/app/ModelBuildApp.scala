@@ -8,6 +8,10 @@ import org.apache.spark.ml.evaluation.RegressionEvaluator
 import org.apache.spark.ml.recommendation.ALS
 import org.apache.spark.sql.SparkSession
 
+/**
+ * offline ALS recommendation service
+ * Tianju Zhou - 05.17.2020
+ */
 object ModelBuildApp extends App{
   Logger.getLogger("spark").setLevel(Level.OFF)
   Logger.getLogger("org").setLevel(Level.OFF)

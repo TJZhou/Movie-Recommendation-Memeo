@@ -1,7 +1,6 @@
 # Movie Recommendation System
 
-## Live Demo:
-    https://memeo.tj-z.com
+## Live Demo: https://memeo.tj-z.com
 
 ## Tech Stack:
 
@@ -9,10 +8,13 @@
     Angular 8
 
 ### Web Backend:
-    Spring Boot, MySQL (RDS), RESTFul API, Docker
+    Spring Boot, MySQL (RDS), RESTFul API, Docker, Redis (ElastiCache)
+
+### Stream Process:
+    Flume, Kafka, Spark Streaming
 
 ### Data Analysis:
-    Scala, Spark, Spark MLlib, Flume, Kafka
+    Scala, Spark, Spark MLlib, K-Means,
 
 ### CI/CD:
     AWS S3, Travis CI, AWS CodeDeploy, AWS CodePipeline
@@ -49,8 +51,7 @@ Import CSV data into database
 
 Run `ModelBuildApp.scala` to build Offline ALS recommendation model. After model successfully build, update movie_recommend table in MySql.
 
-Run `SparkStreamApp.scala` to start Spark Streaming. Pull stream data from Kafka 
-### (!!REAL TIME MOVIE RECOMMENDATION NOT IMPLEMENTED YET!!)
+Run `SparkStreamApp.scala` to start Spark Streaming. Pull stream data from Kafka and recommend with K-Means
 
 ### 4. Docker
 Build Docker Image

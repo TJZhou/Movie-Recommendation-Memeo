@@ -40,10 +40,50 @@ object MySqlConnectionService{
   }
 
   /**
+   * Before implementing K-Means algorithm.
+   * Fetch and pre-filter the movie data which contains the log fields
+   */
+  def preFilterMovies(movieId: Long, movieYear: String, genres: Array[String]): Seq[Movie] = {
+    val connection: Connection = MySqlConnectionPool.connectionPool.getConnection()
+    var query: String = "SELECT * FROM movie m WHERE (m.title LIKE ?"
+    genres.foreach(genre => {
+      query += " OR m.genres LIKE ?"
+    })
+    query += ") AND m.movie_id != ?"
+    val statement = connection.prepareStatement(query)
+    try {
+      statement.setString(1, "%" + movieYear + "%")
+      for(idx <- 1 to genres.length) {
+        statement.setString(idx+1, "%" + genres(idx-1) + "%")
+      }
+      statement.setLong(genres.length + 2, movieId)
+      val rs: ResultSet = statement.executeQuery()
+      var movieList = ListBuffer[Movie]()
+      while(rs.next()) {
+        val movieId = rs.getLong("movie_id")
+        val imdbId = rs.getLong("imdb_id")
+        val title = rs.getString("title")
+        val genres = rs.getString("genres")
+        val rating = rs.getDouble("rating")
+        val rater = rs.getLong("rater");
+        movieList += Movie(movieId, imdbId, title, genres, rating, rater)
+      }
+      movieList.toSeq
+    } catch {
+      case e: Exception => e.printStackTrace()
+      Nil
+    } finally {
+      statement.close()
+      connection.close()
+    }
+  }
+
+  /**
+   * Deprecated -- Use Kafka Stream instead.
    * Get recent user log. There data will be used
    * for real time analysis and movie recommendation
    */
-  def selectRecentRatingLogByUser(userId: String): ListBuffer[MemeoMovieLog] = {
+  def selectRecentRatingLogByUser(userId: String): Seq[MemeoMovieLog] = {
     val connection: Connection = MySqlConnectionPool.connectionPool.getConnection()
     val statement = connection.prepareStatement(Queries.RECENT_RATING_BY_USER)
     try{
@@ -59,17 +99,17 @@ object MySqlConnectionService{
         val rating = rs.getInt("rating");
         movieList += new MemeoMovieLog(timestamp, userId, movieId, title, genres, rating)
       }
-      movieList
+      movieList.toSeq
     } catch {
       case e: Exception => e.printStackTrace()
-      ListBuffer.empty
+      Nil
     } finally {
       statement.close()
       connection.close()
     }
   }
 
-  def getMovieRatings(): ListBuffer[MovieRating] = {
+  def getMovieRatings(): Seq[MovieRating] = {
     val connection: Connection = MySqlConnectionPool.connectionPool.getConnection()
     val statement = connection.createStatement()
     try {
@@ -85,7 +125,7 @@ object MySqlConnectionService{
       movieRatingList
     } catch {
       case e: Exception => e.printStackTrace()
-      ListBuffer.empty
+      Nil
     } finally {
       statement.close()
       connection.close()
