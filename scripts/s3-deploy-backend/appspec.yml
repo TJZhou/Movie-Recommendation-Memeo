@@ -2,9 +2,9 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/backend
+    destination: /var/backend/memeo
 hooks:
   ApplicationStart:
-    - location: start-server.sh
+    - location: start-app.sh
       timeout: 300
       runas: root

@@ -13,5 +13,5 @@ npm install
 ng build --prod
 cd ..
 
-zip -r deploy-folder-frontend/memeo-frontend.zip frontend/dist/memeo/*
-zip -r deploy-folder-frontend/memeo-frontend.zip scripts/s3-deploy-frontend/*
+zip -r -j deploy-folder-frontend/memeo-frontend.zip frontend/dist/memeo/*
+zip -r -j deploy-folder-frontend/memeo-frontend.zip scripts/s3-deploy-frontend/*

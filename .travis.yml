@@ -5,28 +5,20 @@ branches:
 jobs:
   stages:
     - test
-    - build
     - deploy
 
   include:
     - stage: test
       script: ./scripts/test-backend.sh
 
-    - stage: build
+    - stage: deploy
+      name: deploy-frontend
       language: node_js
       node_js:
       - node  # Current stable, i.e. 13 in October, 2019
       - lts/* # Most recent LTS version, i.e. 12 in October, 2019
       - "10"  # Explicitly include an active LTS version
-      name: build-frontend
-      script: ./scripts/build-frontend.sh
-
-    - stage: build
-      name: build-backend
-      script: ./scripts/build-backend.sh
-
-    - stage: deploy
-      name: deploy-frontend
+      script: ./scripts/deploy-frontend.sh
       deploy: 
         provider: s3
         bucket: tj-memeo-frontend
@@ -34,12 +26,11 @@ jobs:
         skip_cleanup: true
         local_dir: deploy-folder-frontend
         access_key_id: $AWS_ACCESS_KEY_ID
-        secret_access_key:
-          secure: $AWS_ACCESS_KEY
+        secret_access_key: $AWS_ACCESS_KEY
 
     - stage: deploy
-      script: ./scripts/deploy-backend.sh
       name: deploy-backend
+      script: ./scripts/deploy-backend.sh
       deploy: 
         provider: s3
         bucket: tj-memeo-backend
@@ -47,5 +38,4 @@ jobs:
         skip_cleanup: true
         local_dir: deploy-folder-backend
         access_key_id: $AWS_ACCESS_KEY_ID
-        secret_access_key:
-          secure: $AWS_ACCESS_KEY
+        secret_access_key: $AWS_ACCESS_KEY

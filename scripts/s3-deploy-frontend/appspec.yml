@@ -1,10 +1,10 @@
 version: 0.0
 os: linux
 files:
-  - source: /frontend/dist/memeo
+  - source: /
     destination: /var/www/memeo
 hooks:
   BeforeInstall:
-    - location: scripts/s3-deploy-frontend/start-app.sh
+    - location: start-app.sh
       timeout: 300
       runas: root
