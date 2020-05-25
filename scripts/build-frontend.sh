@@ -8,7 +8,7 @@ mkdir -p deploy-folder-frontend
 rm -rf deploy-folder-frontend/*
 
 cd frontend
-# npm install -g angular-cli
+npm install -g @angular/cli
 npm install
 ng build --prod
 cd ..
