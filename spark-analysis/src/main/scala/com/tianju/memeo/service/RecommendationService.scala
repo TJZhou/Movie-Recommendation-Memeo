@@ -10,7 +10,6 @@ import scala.annotation.tailrec
 object RecommendationService {
 
   def KMeansRecommendation(logStream: RDD[String]): Unit = {
-    logStream.foreach(println)
     try {
       val logScheme = logStream.map(_.split("--")).map(variables => MemeoMovieLog.schema(variables))
       // get the most recent log of the user
@@ -71,7 +70,6 @@ object RecommendationService {
     // c: Map[Double, Seq[(Long, Double)]; c._2: Seq[(Long, Double)
     // cc: (Long, Double); cc._2: Double -- which is movie weight
     val newMeans = (for (c <- cluster) yield c._2.map(cc => cc._2).sum / c._2.length).toSeq
-    println(means, newMeans)
     if (maxIter > 0 && !converged(means, newMeans, eta)) {
       KMeans(newMeans, movieWeights, maxIter - 1, eta)
     } else {

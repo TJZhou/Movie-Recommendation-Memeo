@@ -13,8 +13,8 @@ import org.apache.spark.sql.SparkSession
  * Tianju Zhou - 05.17.2020
  */
 object ModelBuildApp extends App{
-  Logger.getLogger("spark").setLevel(Level.OFF)
-  Logger.getLogger("org").setLevel(Level.OFF)
+  Logger.getLogger("spark").setLevel(Level.WARN)
+  Logger.getLogger("org").setLevel(Level.WARN)
 
   val spark = SparkSession.builder().appName("MovieRate").master("local[*]").getOrCreate()
 

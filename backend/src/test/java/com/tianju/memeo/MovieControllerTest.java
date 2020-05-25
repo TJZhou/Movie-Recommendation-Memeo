@@ -31,7 +31,7 @@ public class MovieControllerTest {
     @Test
     public void visitApiWithoutToken() {
         ResponseEntity<Response> resp =
-                testRestTemplate.exchange("/movie/test-user", HttpMethod.GET, null, Response.class);
+                testRestTemplate.exchange("/movie/10000", HttpMethod.GET, null, Response.class);
         Assert.assertEquals(HttpStatus.UNAUTHORIZED, resp.getStatusCode());
     }
 
@@ -40,7 +40,7 @@ public class MovieControllerTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", "Bearer this-is-a-invalid-token");
         ResponseEntity<Response> resp =
-                testRestTemplate.exchange("/movie/test-user", HttpMethod.GET, new HttpEntity<>(null, httpHeaders), Response.class);
+                testRestTemplate.exchange("/movie/10000", HttpMethod.GET, new HttpEntity<>(null, httpHeaders), Response.class);
         Assert.assertEquals(HttpStatus.UNAUTHORIZED, resp.getStatusCode());
     }
 
@@ -49,7 +49,7 @@ public class MovieControllerTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", "Bearer " + testAccessToken);
         ResponseEntity<Response> resp =
-                testRestTemplate.exchange("/movie/test-user", HttpMethod.GET, new HttpEntity<>(null, httpHeaders), Response.class);
+                testRestTemplate.exchange("/movie/10000", HttpMethod.GET, new HttpEntity<>(null, httpHeaders), Response.class);
         Assert.assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 }

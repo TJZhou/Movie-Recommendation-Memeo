@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/backend
+hooks:
+  ApplicationStart:
+    - location: start-server.sh
+      timeout: 300
+      runas: root

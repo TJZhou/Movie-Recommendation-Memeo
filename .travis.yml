@@ -1,0 +1,46 @@
+branches:
+  only:
+  - master
+
+jobs:
+  stages:
+    - test
+    - build
+    - deploy
+
+  include:
+    - stage: test
+      script: ./scripts/test-backend.sh
+
+    - stage: build
+      name: build-frontend
+      script: ./scripts/build-frontend.sh
+
+    - stage: build
+      name: build-backend
+      script: ./scripts/build-backend.sh
+
+    - stage: deploy
+      name: deploy-frontend
+      deploy: 
+        provider: s3
+        bucket: tj-memeo-frontend
+        region: us-east-2
+        skip_cleanup: true
+        local_dir: deploy-folder-frontend
+        access_key_id: $AWS_ACCESS_KEY_ID
+        secret_access_key:
+          secure: $AWS_ACCESS_KEY
+
+    - stage: deploy
+      script: ./scripts/deploy-backend.sh
+      name: deploy-backend
+      deploy: 
+        provider: s3
+        bucket: tj-memeo-backend
+        region: us-east-2
+        skip_cleanup: true
+        local_dir: deploy-folder-backend
+        access_key_id: $AWS_ACCESS_KEY_ID
+        secret_access_key:
+          secure: $AWS_ACCESS_KEY

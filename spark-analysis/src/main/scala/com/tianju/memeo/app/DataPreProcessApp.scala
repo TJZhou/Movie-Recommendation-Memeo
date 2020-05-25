@@ -12,8 +12,8 @@ import org.apache.spark.sql.{Dataset, Encoders, SparkSession}
  */
 object DataPreProcessApp extends App{
 
-  Logger.getLogger("spark").setLevel(Level.OFF)
-  Logger.getLogger("org").setLevel(Level.OFF)
+  Logger.getLogger("spark").setLevel(Level.WARN)
+  Logger.getLogger("org").setLevel(Level.WARN)
 
   val spark = SparkSession.builder().appName("MovieRate").master("local[*]").getOrCreate()
 

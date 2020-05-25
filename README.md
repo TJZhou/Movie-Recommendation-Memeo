@@ -1,7 +1,5 @@
 # Movie Recommendation System
 
-## Live Demo: https://memeo.tj-z.com
-
 ## Tech Stack:
 
 ### Web Frontend: 
@@ -53,6 +51,8 @@
 
 7. Run `SparkStreamApp.scala` to start Spark Streaming. Pull stream data from Kafka and recommend with K-Means
 
+8. In SBT console run command `assembly` to build the project. Use `java -cp spark-analysis-assembly-0.1.jar com.tianju.memeo.app.[MainClassName]` to run certain process after building. 
+
 ### 4. Docker
 1. Build Docker Image
 `docker build --tag <repository>/<iamge-name>:<version> .`
@@ -84,6 +84,8 @@ https://kafka.apache.org/downloads
     
 4. Create Topic
 `bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test`
+
+## Live Demo: https://memeo.tj-z.com
 
 ## Reference: 
 1. https://kafka.apache.org/quickstart

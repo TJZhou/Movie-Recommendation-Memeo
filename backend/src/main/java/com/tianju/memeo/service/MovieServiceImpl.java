@@ -27,9 +27,10 @@ public class MovieServiceImpl {
     private String redisHost;
     @Value("${spring.redis.port}")
     private Integer redisPort;
-    private MovieRepository movieRepository;
+    private final String userLogPath = "log-user/memeo-user.log";
+    private final MovieRepository movieRepository;
     private final MovieRatingRepository movieRatingRepository;
-    private MovieRecommendRepository movieRecommendedRepository;
+    private final MovieRecommendRepository movieRecommendedRepository;
 
     @Autowired
     public MovieServiceImpl(MovieRepository movieRepository, MovieRecommendRepository movieRecommendedRepository, MovieRatingRepository movieRatingRepository) {
@@ -94,7 +95,7 @@ public class MovieServiceImpl {
                 .orElse(new MovieRating(userId, movieId, userRating, timestamp));
         movieRating.setRating(userRating);
         movieRatingRepository.save(movieRating);
-        try (FileWriter fw = new FileWriter("log-user/memeo-user.log", true);
+        try (FileWriter fw = new FileWriter(userLogPath, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
             out.println(timestamp+ "--" + userId + "--" + movieId+ "--" + title + "--" + genres + "--" + userRating);
