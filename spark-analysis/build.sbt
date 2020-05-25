@@ -12,6 +12,7 @@ libraryDependencies += "org.apache.spark" % "spark-streaming-kafka-0-10_2.12" % 
 libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.4.5"
 libraryDependencies += "mysql" % "mysql-connector-java" % "8.0.15"
 libraryDependencies += "org.apache.commons" % "commons-dbcp2" % "2.7.0"
+libraryDependencies += "net.debasishg" %% "redisclient" % "3.30"
 
 assemblyMergeStrategy in assembly := {
   case "META-INF/services/com.mysql.cj.jdbc.Driver" => MergeStrategy.concat

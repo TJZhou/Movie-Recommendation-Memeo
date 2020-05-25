@@ -9,20 +9,24 @@ import com.tianju.memeo.repository.MovieRatingRepository;
 import com.tianju.memeo.repository.MovieRecommendRepository;
 import com.tianju.memeo.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
+import java.util.*;
 import java.sql.Timestamp;
-import java.util.Map;
-import java.util.Optional;
 
 @Service(value = "MovieServiceImpl")
 public class MovieServiceImpl {
 
+    @Value("${spring.redis.host}")
+    private String redisHost;
+    @Value("${spring.redis.port}")
+    private Integer redisPort;
     private MovieRepository movieRepository;
     private final MovieRatingRepository movieRatingRepository;
     private MovieRecommendRepository movieRecommendedRepository;
@@ -40,6 +44,18 @@ public class MovieServiceImpl {
             initUserRecommendation(userId);
         }
         return movieRepository.findRecommendedMovieByUserId(userId);
+    }
+
+    // Movie doesn't have related userId compared to MoviePOJO
+    public Collection<Movie>  getRealTimeUserRecommendation(Long userId) {
+        Jedis jedis = new Jedis(redisHost, redisPort);
+        String[] movieIds = jedis.get(userId.toString()).split(",");
+        List<Movie> movieList = new ArrayList<>();
+        for(String movieId : movieIds) {
+            Movie movie = movieRepository.findById(Long.parseLong(movieId)).orElseThrow(NoSuchElementException::new);
+            movieList.add(movie);
+        }
+        return movieList;
     }
 
     /**

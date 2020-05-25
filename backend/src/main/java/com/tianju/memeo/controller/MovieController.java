@@ -1,6 +1,7 @@
 package com.tianju.memeo.controller;
 
 import com.tianju.memeo.interfaces.MoviePOJO;
+import com.tianju.memeo.model.Movie;
 import com.tianju.memeo.model.Response;
 import com.tianju.memeo.service.MovieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class MovieController {
 
     private MovieServiceImpl movieServiceImpl;
+
     // this can be changed according to frontend requirements
     private final Long pageSize = 30l;
 
@@ -26,6 +28,12 @@ public class MovieController {
     @GetMapping(value = "/{userId}")
     public ResponseEntity<Response<MoviePOJO>> getRecommendedMovieByUser(@PathVariable Long userId) {
         Response<MoviePOJO> resp = new Response<>(movieServiceImpl.getUserRecommendation(userId));
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping(value = "/recommend/{userId}")
+    public ResponseEntity<Response<Movie>> getRealTimeRecommendationByUser(@PathVariable Long userId) {
+        Response<Movie> resp = new Response<>(movieServiceImpl.getRealTimeUserRecommendation(userId));
         return ResponseEntity.ok(resp);
     }
 

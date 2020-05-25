@@ -14,7 +14,7 @@
     Flume, Kafka, Spark Streaming
 
 ### Data Analysis:
-    Scala, Spark, Spark MLlib, K-Means,
+    Scala, Spark, Spark MLlib, K-Means
 
 ### CI/CD:
     AWS S3, Travis CI, AWS CodeDeploy, AWS CodePipeline
@@ -92,4 +92,6 @@ List & Describe Topic
 
 `bin/kafka-topics.sh --describe --bootstrap-server localhost:9092 --topic my-replicated-topic`
 
-Reference: https://kafka.apache.org/quickstart
+Reference: 1. https://kafka.apache.org/quickstart
+
+2. Himel, M. T., Uddin, M. N., Hossain, M. A., &amp; Jang, Y. M. (2017). Weight based movie recommendation system using K-means algorithm. 2017 International Conference on Information and Communication Technology Convergence (ICTC). doi:10.1109/ictc.2017.8190928

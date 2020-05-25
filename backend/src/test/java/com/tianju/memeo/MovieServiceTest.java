@@ -10,8 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testng.Assert;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Collection;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -23,9 +22,16 @@ public class MovieServiceTest {
 
     @Test
     public void movieRatingTest() {
-        Optional<MovieRating> movieRating = movieServiceImpl.getMovieRating(10000L, 123L);
+        Optional<MovieRating> movieRating = movieServiceImpl.getMovieRating(10001L, 123L);
         Assert.assertFalse(movieRating.isPresent());
-        movieRating = movieServiceImpl.getMovieRating(10000L, 296L);
+        movieRating = movieServiceImpl.getMovieRating(10001L, 296L);
         Assert.assertTrue(movieRating.isPresent());
+    }
+
+    @Test
+    public void movieRecommendationTest() {
+        Collection<Movie> movieList = movieServiceImpl.getRealTimeUserRecommendation(10000L);
+        Assert.assertEquals(movieList.size(), 10);
+        Assert.assertThrows(NullPointerException.class, () -> movieServiceImpl.getRealTimeUserRecommendation(0L));
     }
 }
