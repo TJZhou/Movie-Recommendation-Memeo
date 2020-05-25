@@ -3,7 +3,7 @@ package com.tianju.memeo.model
 import java.sql.Timestamp
 
 case class MemeoMovieLog(time: Timestamp,
-                         userId: String,
+                         userId: Int,
                          movieId: Long,
                          title: String,
                          genres: String,
@@ -13,7 +13,7 @@ object MemeoMovieLog {
 
   def schema(variables: Array[String]): MemeoMovieLog = {
     val timestamp = Timestamp.valueOf(variables(0))
-    val userId = variables(1)
+    val userId = variables(1).toInt
     val movieId = variables(2).toLong
     val title = variables(3)
     val genres = variables(4)

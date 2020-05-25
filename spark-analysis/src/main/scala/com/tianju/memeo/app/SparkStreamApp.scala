@@ -13,14 +13,16 @@ import org.apache.spark.{SparkConf, SparkContext}
  */
 object SparkStreamApp extends App {
 
+  Logger.getLogger("spark").setLevel(Level.WARN)
+  Logger.getLogger("org").setLevel(Level.WARN)
+
 //  final val testLog = Seq(
 //    "2020-05-18 15:26:25.554--10001--3435--Double Indemnity (1944)--Crime|Drama|Film-Noir--3",
 //    "2020-05-18 15:26:31.996--10001--5995--Pianist, The (2002)--Drama|War--5",
 //    "2020-05-18 15:29:37.543--10003--356--Forrest Gump (1994)--Comedy|Drama|Romance|War--5",
 //    "2020-05-18 15:29:39.031--10003--318--Shawshank Redemption, The (1994)--Crime|Drama--5")
-
-  Logger.getLogger("spark").setLevel(Level.WARN)
-  Logger.getLogger("org").setLevel(Level.WARN)
+//
+//  RecommendationService.KMeansRecommendation(testLog)
 
   val conf = new SparkConf().setAppName("Memeo").setMaster("local[*]")
   val sc = new SparkContext(conf)

@@ -92,7 +92,7 @@ object MySqlConnectionService{
       var movieList = ListBuffer[MemeoMovieLog]()
       while(rs.next()) {
         val timestamp = rs.getTimestamp("timestamp")
-        val userId = rs.getString("user_id")
+        val userId = rs.getInt("user_id")
         val movieId = rs.getLong("movie_id")
         val title = rs.getString("title")
         val genres = rs.getString("genres")

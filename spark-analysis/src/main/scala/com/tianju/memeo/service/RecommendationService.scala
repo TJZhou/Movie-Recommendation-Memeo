@@ -2,6 +2,8 @@ package com.tianju.memeo.service
 
 import com.tianju.memeo.model.{MemeoMovieLog, Movie}
 import org.apache.spark.rdd.RDD
+import com.redis._
+import com.tianju.memeo.resource.Resource
 
 import scala.annotation.tailrec
 
@@ -22,15 +24,48 @@ object RecommendationService {
         val movieWeights = KMeansWeightedRules(movieList, year, genres, log.movieId)
         val initialMeans = Seq(2.0, 4.0, 6.0, 8.0, 10.0)
         val KMeansCluster = KMeans(initialMeans, movieWeights, 10, 10-4)
+        resultPersist(log.userId, weightedRules(Movie(log.movieId, 0, log.title, log.genres, log.userRating, 50), year, genres), KMeansCluster)
       })
     } catch {
       case e: RuntimeException => e.printStackTrace()
     }
   }
 
+  /**
+   * Select the cluster which has the most closest mean value with input movie weight
+   * Persist results into Redis. Key: userId, Value: sequence of movieId separated by comma
+   */
+  private def resultPersist(userId: Int, weight: Double, KMeansCluster: Map[Double, Seq[(Long, Double)]]) = {
+    var closestCluster: Double = -1.0
+    val redisClient = new RedisClient(Resource.redisUrl, Resource.redisPort)
+    for(cluster <- KMeansCluster) {
+      if(closestCluster == -1.0 || Math.abs(cluster._1 - weight) < Math.abs(closestCluster - weight)) {
+        closestCluster = cluster._1
+      }
+    }
+    if(KMeansCluster.get(closestCluster).isEmpty) {
+      throw new IllegalArgumentException("Empty Cluster!")
+    }
+    val movieIds = KMeansCluster(closestCluster)
+    println(movieIds)
+    if(movieIds.size <= 10) {
+      val idStr = movieIds.map(movieId => movieId._1).mkString(",")
+      redisClient.set(userId, idStr)
+    } else {
+      val idStr = movieIds.map(movieId => movieId._1).sorted.take(10).mkString(",")
+      redisClient.set(userId, idStr)
+    }
+  }
 
+  /**
+   * @param means: mean value of cluster weights
+   * @param movieWeights: sequence of (movieId, movieWeight)
+   * @param maxIter: maximum iteration
+   * @param eta: converged acceptance criteria
+   * @return sequence of cluster (means, sequence(movieId, movieWeight))
+   */
   @tailrec
-  private def KMeans(means: Seq[Double], movieWeights: Seq[(Long, Double)], maxIter: Int, eta: Double): Map[Double, scala.Seq[(Long, Double)]] = {
+  private def KMeans(means: Seq[Double], movieWeights: Seq[(Long, Double)], maxIter: Int, eta: Double): Map[Double, Seq[(Long, Double)]] = {
     val cluster = classify(means, movieWeights)
     // get new mean value
     // c: Map[Double, Seq[(Long, Double)]; c._2: Seq[(Long, Double)
@@ -85,14 +120,18 @@ object RecommendationService {
    */
   private def KMeansWeightedRules(movieList: Seq[Movie], year: String, genres: Array[String], movieId: Long): Seq[(Long, Double)] = {
     movieList.map(movie => {
-      var weight = 0.0
-      weight += (if (movie.title.contains(year)) 0.1 else 0.0)
-      genres.foreach(genre => {
-        weight += (if (movie.genres.contains(genre)) 0.15 else 0.0)
-      })
-      weight += ratingRules(movie.rating, movie.rater)
-      (movie.movieId, weight)
+      (movie.movieId, weightedRules(movie, year, genres))
     })
+  }
+
+  private def weightedRules(movie: Movie, year: String, genres: Array[String]): Double = {
+    var weight = 0.0
+    weight += (if (movie.title.contains(year)) 0.1 else 0.0)
+    genres.foreach(genre => {
+      weight += (if (movie.genres.contains(genre)) 0.15 else 0.0)
+    })
+    weight += ratingRules(movie.rating, movie.rater)
+    weight
   }
 
   private def ratingRules(rating: Double, rater: Long): Double = {
