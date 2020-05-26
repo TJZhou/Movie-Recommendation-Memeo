@@ -5,7 +5,6 @@ FROM openjdk:8-jdk-alpine
 ARG JAR_FILE=target/memeo-0.0.1-SNAPSHOT.jar
 
 EXPOSE 8071
-VOLUME /var/backend/memeo
 
 # cd /opt/app
 WORKDIR /opt/app
@@ -16,4 +15,4 @@ RUN mkdir -p /opt/app/log-user
 # cp target/spring-boot-web.jar /opt/app/app.jar
 COPY ${JAR_FILE} app.jar
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/urandom", "-Dspring.config.location=/opt/app/config/application-prod.properties", "-jar","app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/urandom", "-Dspring.config.additional-location=/opt/app/config/application-prod.properties", "-jar","app.jar"]
