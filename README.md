@@ -16,7 +16,8 @@
 
 ### CI/CD:
     AWS S3, Travis CI, AWS CodeDeploy, AWS CodePipeline
-
+## Workflow:
+![alt text](https://tianju.s3.amazonaws.com/memeo-workflow.jpg)
 ## How to run:
 ### 0. Clone the repository
 
