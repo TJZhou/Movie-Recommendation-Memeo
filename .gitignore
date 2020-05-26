@@ -1,1 +1,3 @@
-/deploy_folder
+/deploy_folder-frontend
+/deploy-folder-backend
+*.zip

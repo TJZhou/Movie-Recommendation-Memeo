@@ -11,7 +11,8 @@ cd frontend
 npm install -g @angular/cli
 npm install
 ng build --prod
-cd ..
+cd dist/memeo
+zip -r ../../../deploy-folder-frontend/memeo-frontend.zip *
+cd ../../../
 
-zip -r -j deploy-folder-frontend/memeo-frontend.zip frontend/dist/memeo/*
 zip -r -j deploy-folder-frontend/memeo-frontend.zip scripts/s3-deploy-frontend/*
