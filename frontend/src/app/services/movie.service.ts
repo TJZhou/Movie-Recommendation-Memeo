@@ -18,6 +18,10 @@ export class MovieService {
     return this.http.get<MovieResponse>(this.movieUrl + userId);
   }
 
+  public getRealtimeMovieRecommendation(userId: number): Observable<MovieResponse> {
+    return this.http.get<MovieResponse>(this.movieUrl + 'recommend/' + userId);
+  }
+
   public getMoviesByGenre(genre: string, userId: number, page: number): Observable<MovieResponse> {
     const params = {
       'genre': genre,

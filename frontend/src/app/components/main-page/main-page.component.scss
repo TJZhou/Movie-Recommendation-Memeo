@@ -11,16 +11,6 @@
   display: inherit;
 }
 
-.header-span{
-  padding: 0 1em 0 1em;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-.fill-remaining-space {
-  flex: 1 1 auto;
-}
-
 .loading {
   z-index: 999;
   position: absolute;

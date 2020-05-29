@@ -86,6 +86,9 @@ https://kafka.apache.org/downloads
 4. Create Topic
 `bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test`
 
+### 7. Auth0
+1. Set up Auth0 application 
+2. If test cases fail, make sure the Auth0 test access token is still valid. Otherwise you need to renew the token.
 ## Live Demo: https://memeo.tj-z.com
 
 ## Reference: 

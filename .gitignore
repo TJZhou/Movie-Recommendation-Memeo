@@ -1,3 +1,5 @@
-/deploy_folder-frontend
-/deploy-folder-backend
+deploy_folder-frontend/
+deploy-folder-backend/
 *.zip
+.VSCodeCounter
+additional-files/

@@ -35,6 +35,7 @@ export class MainPageComponent implements OnInit {
               public errorMessage: MatSnackBar) {
                 this.page = 1;
                 this.isLoading = true;
+                this.movies = [];
               }
 
   ngOnInit() {
@@ -48,24 +49,24 @@ export class MainPageComponent implements OnInit {
           const user = new User();
           user.userId = null;
           user.username = this.username;
+          // if the user already exists. backend end will just return the user info.
           await this.userService.createUser(user).subscribe(resp => {
             localStorage.setItem('userId', resp.data[0].userId.toString());
-            this.userId = parseInt(localStorage.getItem('userId'), 10);
-            if (this.queryParamGenre === 'Recommended' || this.queryParamGenre === undefined) {
-              this.getMovieRecommendation();
-            } else {
-              this.listMoviesByGenre(this.queryParamGenre);
-            }
+            this.listMovies();
           });
       } else {
-        this.userId = parseInt(localStorage.getItem('userId'), 10);
-        if (this.queryParamGenre === 'Recommended' || this.queryParamGenre === undefined) {
-          this.getMovieRecommendation();
-        } else {
-          this.listMoviesByGenre(this.queryParamGenre);
-        }
+        this.listMovies();
       }
     });
+  }
+
+  listMovies(): void {
+    this.userId = parseInt(localStorage.getItem('userId'), 10);
+    if (this.queryParamGenre === 'Recommended' || this.queryParamGenre === undefined) {
+      this.getMovieRecommendation();
+    } else {
+      this.listMoviesByGenre(this.queryParamGenre);
+    }
   }
 
   getMovieRecommendation(): void {
@@ -77,6 +78,24 @@ export class MainPageComponent implements OnInit {
       this.movies = response.data;
       this.isLoading = false;
     }, err => {
+      const error = err.error;
+      if (error.code === 4004) {
+        this.movies = [];
+      }
+      console.log(err);
+    });
+  }
+
+  guessYouLike(): void {
+    this.movieService.getRealtimeMovieRecommendation(this.userId).subscribe(res => {
+      const response: MovieResponse = res;
+      this.movies = response.data;
+      this.isLoading = false;
+    }, err => {
+      const error = err.error;
+      if (error.code === 4004) {
+        this.movies = [];
+      }
       console.log(err);
     });
   }
@@ -135,10 +154,5 @@ export class MainPageComponent implements OnInit {
   rateTheMovie(event: any, movie: Movie): void {
     movie.userRating = event.rating;
     this.movieService.updateMovieRating(this.userId, movie).subscribe();
-  }
-
-  logout() {
-    localStorage.clear();
-    this.auth.logout();
   }
 }

@@ -2,53 +2,55 @@
   <mat-spinner class="spinner"></mat-spinner>
 </div>
 
-
-<mat-toolbar color="primary">
-  <span class="header-span">Memeo</span>
-  <span class="fill-remaining-space"></span>
-  <span class="header-span" (click)="logout()">Log out</span>
-</mat-toolbar>
+<app-nav-bar></app-nav-bar>
 
 <div class="container">
-  <mat-button-toggle-group  #group="matButtonToggleGroup">
-    <mat-button-toggle  mat-raised-button (click)="getMovieRecommendation()">Recommended</mat-button-toggle>
-    <mat-button-toggle  mat-raised-button (click)="listMoviesByGenre('')">All Movies</mat-button-toggle>
+  <mat-button-toggle-group  fxLayout="row wrap" #group="matButtonToggleGroup">
+    <mat-button-toggle  fxFlex="16.6%" mat-raised-button (click)="guessYouLike()">Guess You Like!</mat-button-toggle>
+    <mat-button-toggle  fxFlex="16.6" mat-raised-button (click)="getMovieRecommendation()">Recommended</mat-button-toggle>
+    <mat-button-toggle  fxFlex="16.6" mat-raised-button (click)="listMoviesByGenre('')">All Movies</mat-button-toggle>
     <ng-container *ngFor="let genre of genres">
-      <mat-button-toggle mat-raised-button (click)="listMoviesByGenre(genre)">{{genre}}</mat-button-toggle>
+      <mat-button-toggle fxFlex="16.6" mat-raised-button (click)="listMoviesByGenre(genre)">{{genre}}</mat-button-toggle>
     </ng-container>
   </mat-button-toggle-group>
 </div>
 
 <div class="container">
   <div fxLayout="row wrap"  fxLayoutAlign="center center">
-    <ng-container *ngFor="let movie of movies">
-      <mat-card class="movieCard">
-        <mat-card-header>
-          <mat-card-title>{{movie.title}}</mat-card-title>
-          <mat-card-subtitle>{{movie.genres}}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p>
-            <span>Rating:</span>
-            <star-rating [starType]="'svg'" [readOnly]="true" [rating]="movie.rating" [showHalfStars]="true"></star-rating>
-          </p>
-          <p><span>Leave Your Rate:</span>
-            <span *ngIf="movie.userRating">
-              <star-rating [starType]="'svg'" [rating]="movie.userRating" [showHalfStars]="true" [hoverEnabled]="true" (starClickChange)="rateTheMovie($event, movie)"></star-rating>
-            </span>
-            <span *ngIf="!movie.userRating">
-              <star-rating [starType]="'svg'" [rating]="0" [showHalfStars]="true" [hoverEnabled]="true" (starClickChange)="rateTheMovie($event, movie)"></star-rating>
-            </span>
-          </p>
-          <span>imdb link: </span>
-          <a href="https://www.imdb.com/title/tt0{{movie.imdbId}}" target="_blank">
-            https://www.imdb.com/title/tt0{{movie.imdbId}}
-          </a>
-        </mat-card-content>
-      </mat-card>
+    <ng-container *ngIf = "movies.length === 0; else showMovies">
+      No Movies Found.
     </ng-container>
   </div>
 </div>
+
+<ng-template #showMovies>
+  <ng-container *ngFor="let movie of movies">
+    <mat-card class="movieCard">
+      <mat-card-header>
+        <mat-card-title>{{movie.title}}</mat-card-title>
+        <mat-card-subtitle>{{movie.genres}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          <span>Rating:</span>
+          <star-rating [starType]="'svg'" [readOnly]="true" [rating]="movie.rating" [showHalfStars]="true"></star-rating>
+        </p>
+        <p><span>Leave Your Rate:</span>
+          <span *ngIf="movie.userRating">
+            <star-rating [starType]="'svg'" [rating]="movie.userRating" [showHalfStars]="true" [hoverEnabled]="true" (starClickChange)="rateTheMovie($event, movie)"></star-rating>
+          </span>
+          <span *ngIf="!movie.userRating">
+            <star-rating [starType]="'svg'" [rating]="0" [showHalfStars]="true" [hoverEnabled]="true" (starClickChange)="rateTheMovie($event, movie)"></star-rating>
+          </span>
+        </p>
+        <span>imdb link: </span>
+        <a href="https://www.imdb.com/title/tt0{{movie.imdbId}}" target="_blank">
+          https://www.imdb.com/title/tt0{{movie.imdbId}}
+        </a>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</ng-template>
 
 
 <div class="container">

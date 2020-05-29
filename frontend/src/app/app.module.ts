@@ -19,9 +19,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgModule } from '@angular/core';
 import { StarRatingModule } from 'angular-star-rating';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @NgModule({
-  declarations: [AppComponent, MainPageComponent, LoginComponent, ErrorPageComponent],
+  declarations: [AppComponent, MainPageComponent, LoginComponent, ErrorPageComponent, NavBarComponent],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
