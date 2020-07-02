@@ -5,6 +5,6 @@ files:
     destination: /var/www/memeo
 hooks:
   BeforeInstall:
-    - location: start-app.sh
+    - location: before-start.sh
       timeout: 300
       runas: root

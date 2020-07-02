@@ -1,7 +1,0 @@
-#!/bin/bash
-
-set -e
-
-cd backend
-mvn -DMYSQL_SERVER=$MYSQL_SERVER -DMYSQL_PASSWORD=$MYSQL_PASSWORD -DREDIS_SERVER=$REDIS_SERVER test
-cd ..

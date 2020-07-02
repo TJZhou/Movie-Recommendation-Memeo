@@ -4,7 +4,11 @@ branches:
 
 env:
   global:
-    MAVEN_CLI_OPTS="${REDIS_SERVER} ${MYSQL_SERVER} ${MYSQL_PASSWORD}"
+    - >
+      MAVEN_CLI_OPTS="
+      -Dspring.redis.host=${REDIS_SERVER} 
+      -Dspring.datasource.url=jdbc:mysql://${MYSQL_SERVER}/tjzhou?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      -Dspring.datasource.password=${MYSQL_PASSWORD}"
 
 jobs:
   stages:
@@ -43,6 +47,8 @@ jobs:
       
     - stage: deploy
       name: deploy-frontend
+      language: node_js
+      node_js: '10'
       script:
       - bash ./scripts/app.sh bf
       - bash ./scripts/app.sh pf
