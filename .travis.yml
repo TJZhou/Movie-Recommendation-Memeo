@@ -2,40 +2,70 @@ branches:
   only:
   - master
 
+env:
+  global:
+    MAVEN_CLI_OPTS="${REDIS_SERVER} ${MYSQL_SERVER} ${MYSQL_PASSWORD}"
+
 jobs:
   stages:
     - test
+    - build
     - deploy
-
+    
   include:
-    - stage: test
-      script: ./scripts/test-backend.sh
 
+    - stage: test
+      name: test-frontend
+      language: node_js
+      node_js: '10'
+      script: bash ./scripts/app.sh tf
+
+    - stage: test
+      name: test-backend
+      language: java
+      jdk: openjdk8
+      script: 
+        - echo $MAVEN_CLI_OPTS
+        - bash ./scripts/app.sh tb $MAVEN_CLI_OPTS
+
+    - stage: build
+      name: build-frontend
+      language: node_js
+      node_js: '10'
+      script: 
+      - bash ./scripts/app.sh bf
+      
+    - stage: build
+      name: build-backend
+      language: java
+      jdk: openjdk8
+      script: bash ./scripts/app.sh bb $MAVEN_CLI_OPTS
+      
     - stage: deploy
       name: deploy-frontend
-      language: node_js
-      node_js:
-      - node  # Current stable, i.e. 13 in October, 2019
-      - lts/* # Most recent LTS version, i.e. 12 in October, 2019
-      - "10"  # Explicitly include an active LTS version
-      script: ./scripts/deploy-frontend.sh
-      deploy: 
+      script:
+      - bash ./scripts/app.sh bf
+      - bash ./scripts/app.sh pf
+      deploy:
         provider: s3
         bucket: tj-memeo-frontend
         region: us-east-2
         skip_cleanup: true
         local_dir: deploy-folder-frontend
-        access_key_id: $AWS_ACCESS_KEY_ID
-        secret_access_key: $AWS_ACCESS_KEY
+        access_key_id: $AWS_KEY_ID
+        secret_access_key: $AWS_KEY
 
     - stage: deploy
       name: deploy-backend
-      script: ./scripts/deploy-backend.sh
-      deploy: 
+      script: 
+      - bash ./scripts/app.sh bb $MAVEN_CLI_OPTS
+      - bash ./scripts/app.sh pb
+      deploy:
         provider: s3
         bucket: tj-memeo-backend
         region: us-east-2
         skip_cleanup: true
         local_dir: deploy-folder-backend
-        access_key_id: $AWS_ACCESS_KEY_ID
-        secret_access_key: $AWS_ACCESS_KEY
+        access_key_id: $AWS_KEY_ID
+        secret_access_key: $AWS_KEY
+        
